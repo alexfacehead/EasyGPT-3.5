@@ -1,6 +1,6 @@
 # System Message Maker (With Tree-of-Thought for Vastly Improved Quality With Only gpt-3.5-turbo)
 
-## **With just a SINGLE sentence**, this script generates a highly optimized System Message for LLMs using OpenAI's GPT-3 model. 
+## **With just a SINGLE sentence**, this script generates a highly optimized System Message for LLMs using OpenAI's GPT-3 model, with high quality answers on par with ChatGPT 4.
 
 It is cheap, requires running a single command, and has interactivity features, logging, and more.
 
@@ -10,10 +10,9 @@ The results are startling: just one sentence can result in - while slower respon
 
 This has been tested with about a sample size of 20, and I'd love to hear feedback!
 
-
 ## Usage on Ubuntu or WSL
 
-0. Setup a venv!
+0. Setup a venv. If you do not know how to do this, skip to the bottom.
 
 1. Run `pip install -r requirements.txt`
 
@@ -42,12 +41,11 @@ This will prompt you for user input for context generation, then it will generat
 - Integration into langchain
 - Portability and overall design integration
 - Internet connectivity coming soon
-- Further optimizations and selective GPT-4 usage options coming soon
+- Further optimizations and selective GPT-4 usage options coming soon! Manual for now
 - Binary Search Tree encoding and vectorization to come soon (hosting issues!)
 - More steerability and interactivity
 - Rotational prompts coming soon
 - Add queries/continuation
-- Fine-tune usage of more powerful language models
 - Fix flags
 - Chat history! Free of training data theft
 - Logging & advanced debug output (and suppression)
@@ -60,3 +58,55 @@ This will prompt you for user input for context generation, then it will generat
 
 (Please replace your_actual_key_here with your actual OpenAI API key.)
 (This README.md was optimized with GPT-4)
+
+# VENV
+\#\# Setting up \`venv\` for Python
+
+\#\#\# macOS & Linux
+
+1. \*\*Install Python\*\* (if not already installed):
+   - You can download from [Python's official website](https://www.python.org/downloads/).
+
+2. \*\*Install \`venv\`\*\* (if not already included with your Python version):
+   \```bash
+   $ sudo apt-get install python3-venv  \# For Ubuntu/Debian
+   \```
+
+3. \*\*Create a virtual environment\*\*:
+   \```bash
+   $ python3 -m venv myenv
+   \```
+
+4. \*\*Activate the virtual environment\*\*:
+   \```bash
+   $ source myenv/bin/activate
+   \```
+
+5. \*\*Deactivate\*\* (when done):
+   \```bash
+   $ deactivate
+   \```
+
+### Windows
+
+1. **Install Python**:
+   - Download from [Python's official website](https://www.python.org/downloads/).
+   - Ensure Python and Pip are added to PATH during installation.
+
+2. **Create a virtual environment**:
+   ```bash
+   C:\> python -m venv myenv
+   ```
+
+3. **Activate the virtual environment**:
+   ```bash
+   C:\> myenv\Scripts\activate
+   ```
+
+4. **Deactivate** (when done):
+   ```bash
+   C:\> deactivate
+   ```
+
+*Note:* For projects requiring different Python versions or dependencies, repeat the steps to create a new virtual environment.
+
