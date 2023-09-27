@@ -1,0 +1,6 @@
+.env
+myenv
+src/__pycache__
+logs/
+__pycache__
+resources
