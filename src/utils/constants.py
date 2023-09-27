@@ -1,10 +1,10 @@
 # Necessary?
 
 # STEP 0: FORMAT QUESTION IN CASE OF GRAMMATICAL ERRORS
-QUESTION_FIXER_PART_ONE = """Thank you for your question! I appreciate your inquiry and would like to provide a suggestion to improve its grammatical correctness, clarity, and overall readability. Here's a revised version of your question with the necessary corrections. I will also remove any outer quotes or outer backticks:\n\n"""
+QUESTION_FIXER_PART_ONE = """Thanks for your question. While maintaining formality, I would like to provide a suggestion to improve your question's grammatical correctness, clarity, and overall readability. Here's a revised version of your question with the necessary corrections. I will also remove any outer quotes or outer backticks:\n\n"""
 
 # STEP 0.1: SECOND HALF OF FORMATTING
-QUESTION_FIXER_PART_TWO = """\n\nI hope this revised version accurately captures your intended meaning and clarifies any potential ambiguities. Thank you for letting me assist you, and I hope the result is to your satisfaction: improved and with any outer quotes or backticks removed."""
+QUESTION_FIXER_PART_TWO = """\n\nThis revised version accurately captures your intended meaning and clarifies any potential ambiguities. Thank you for letting me assist you, and I hope the result is to your satisfaction: improved and with any outer quotes or backticks removed. All I have provided is the revised question, and nothing more."""
 
 # STEP 1: CONTEXT GENERATOR
 AUTOMATED_CONTEXT_CALLER = ("In the context of large language models and their applications, consider "
@@ -68,12 +68,12 @@ TREE_OF_THOUGHT_MAKER_SECOND_HALF = (
     
     "Your System Message should not start with [SYSTEM MESSAGE].")
 
-# Less important
+# Less important - hyper optimizer?
 GPT_4_OPTIMIZER = ("As the supreme prompt enhancer, your task is to elevate user prompts to their peak "
                    "efficiency, maintaining quality and eloquence, yet preserving essential componennts. "
                    "Restructuring to a more optimal structure is encouraged as much as it is required. Compressing the prompt "
                    "in a a highly technical fashion is also desirable, but do not make it too short such that it lacks "
-                   "context. "
+                   "context. If you choose, err on the side of length and context, please do while maintaining the tree of thought idea."
                    "Formulate a versatile template that can optimize any prompt, irrespective of its subject matter: this "
                    "should be a general operation. "
                    "Your methodology should represent technical accuracy, sharp discernment, impeccable structure, and "

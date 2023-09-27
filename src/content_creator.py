@@ -11,7 +11,7 @@ MODEL = logger._get_env_variable("MODEL")
 SUPER_CHARGED = logger._get_env_variable("SUPER_CHARGED")
 
 class ContentGenerator:
-    def __init__(self, prompt_num: Optional[int] = None, model: Optional[str] = None, super_charged: Optional[str] = None, default_compilation: Optional[str] = ""):
+    def __init__(self, prompt_num: Optional[int] = None, model: Optional[str] = None, super_charged: Optional[str] = None, default_compilation: Optional[str] = "", temperature: Optional[float] = 0.33):
         """
         Constructor for the ContentGenerator class
         
@@ -30,10 +30,12 @@ class ContentGenerator:
         self.super_charged = SUPER_CHARGED
         
         # Initialize a gpt-3.5-turbo chat completer
-        self.chat_completer_big = ChatCompletionGenerator(prompt_num=prompt_num, openai_api_key=OPENAI_API_KEY, model="gpt-3.5-turbo-16k", super_charged=super_charged)
+        self.chat_completer_big = ChatCompletionGenerator(temperature=temperature, prompt_num=prompt_num, openai_api_key=OPENAI_API_KEY, model="gpt-3.5-turbo-16k", super_charged=super_charged)
         
         # Initialize a gpt-4-0314 chat completer (more powerful)
-        self.chat_completer_small = ChatCompletionGenerator(prompt_num=prompt_num, openai_api_key=OPENAI_API_KEY, model="gpt-3.5-turbo-16k", super_charged=super_charged)
+        self.chat_completer_small = ChatCompletionGenerator(prompt_num=prompt_num, openai_api_key=OPENAI_API_KEY, model="gpt-3.5-turbo-16k", super_charged=super_charged, temperature=temperature)
+        print(colored("CURRENT TEMPERATURE:", 'cyan'))
+        print(colored(f"{temperature}", 'red', attrs=['bold']))
 
     def perfect_question(self, user_input_question: str):
         total_fixer_prompt = QUESTION_FIXER_PART_ONE + user_input_question + QUESTION_FIXER_PART_TWO

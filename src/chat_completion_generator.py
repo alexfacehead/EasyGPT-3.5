@@ -16,7 +16,7 @@ MODEL = logger._get_env_variable('MODEL')
 SUPER_CHARGED = logger._get_env_variable('SUPER_CHARGED')
 
 class ChatCompletionGenerator:
-    def __init__(self, prompt_num: Optional[int] = 0, openai_api_key: Optional[str] = OPENAI_API_KEY, model: Optional[str] = MODEL, super_charged: Optional[str] = SUPER_CHARGED, default_compilation: Optional[str] = ""):
+    def __init__(self, temperature: Optional[float]=0.33, prompt_num: Optional[int] = 0, openai_api_key: Optional[str] = OPENAI_API_KEY, model: Optional[str] = MODEL, super_charged: Optional[str] = SUPER_CHARGED, default_compilation: Optional[str] = ""):
         """
         Constructor for the SystemMessageMaker class.
         

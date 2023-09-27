@@ -11,7 +11,7 @@ class Logger:
             cls._instance = super(Logger, cls).__new__(cls, *args, **kwargs)
         return cls._instance
 
-    def __init__(self, log_dir: Optional[str] = "logs/"):
+    def __init__(self, log_dir: Optional[str] = "logs/", content: Optional[str] = ""):
         # This ensures that the initialization happens only once
         if not hasattr(self, 'initialized'):
             self.initialized = True
@@ -36,6 +36,7 @@ class Logger:
                     exit(1)
 
             self.log_dir = log_dir
+            self.prompt_dir = "resources/prompts/"
 
     def _get_env_variable(self, key: str) -> Optional[str]:
         value = os.getenv(key)

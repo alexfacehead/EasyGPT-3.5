@@ -32,7 +32,11 @@ This has been tested with about a sample size of 20, and I'd love to hear feedba
 
 `python system-msg-maker.py` or `python3 system-msg-maker.py` if you have both Python 2 and Python 3 installed.
 
-This will prompt you for user input for context generation, then it will generate and print the final system message. The final system message will be saved to a text file in the /prompts/ directory in the script's directory. The text files are named prompt_N.txt, where N is a number that increments with each run of the script.
+This will prompt you for user input for context generation, then it will generate and print the final system message. The final system message will be printed, but not saved, to a directory.
+
+Logging is soon to come, but the information and answers output are invaluable.
+
+Simple fixes to this will be introduced soon.
 
 
 # TO DO

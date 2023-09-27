@@ -1,0 +1,12 @@
+Timestamp: 2023-09-27 09:14:47
+Temperature: 0.05
+Elapsed Time: 58.16 seconds
+
+Expert 1: The impact of global warming on the polar ice caps is significant. Rising temperatures are causing the melting of glaciers and polar ice, leading to the loss of ice mass and the retreat of ice shelves. This contributes to rising sea levels and poses a threat to coastal areas.
+
+Expert 2: I agree with Expert 1. The polar ice caps are highly vulnerable to global warming. The rapid warming of these regions, known as Arctic amplification, is causing the loss of sea ice. This disrupts the delicate balance of polar ecosystems and threatens iconic species like polar bears and walruses.
+
+Expert 3: I also agree. Global warming is causing the polar ice caps to melt at an alarming rate. This not only contributes to rising sea levels but also has cascading effects on the climate system, including changes in ocean currents and weather patterns. The loss of sea ice also reduces the Earth's albedo, leading to further warming.
+
+In summary, the consensus among the experts is that global warming has a significant impact on the polar ice caps. It leads to the melting of glaciers and polar ice, contributing to rising sea levels, disrupting polar ecosystems, and threatening iconic species.
+
