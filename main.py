@@ -1,43 +1,62 @@
-# System Imports
 import argparse
 import os
 import glob
 import shutil
 import json
 from typing import Optional
-from typing import Optional
 from termcolor import colored
-import shutil
-
 
 from src.utils.logs_and_env import Logger
 from src.content_creator import ContentGenerator
-from src.chat_completion_generator import ChatCompletionGenerator
+from src.utils.helpers import format_string
+
+import argparse
+import os
+import glob
+import shutil
+import json
+from typing import Optional
+from termcolor import colored
+
+from src.utils.logs_and_env import Logger
+from src.content_creator import ContentGenerator
+from src.utils.helpers import format_string
 
 
-
-def main(query: Optional[str] = None, openai_api_key: Optional[str] = None, model: Optional[str] = None, super_charged: Optional[str] = None) -> str: 
+def main(query: Optional[str], openai_api_key: Optional[str], model: Optional[str], super_charged: Optional[bool]) -> str:
     # Create a Logger and Initialize Env Vars
-    logger = Logger()
-    OPENAI_API_KEY = logger._get_env_variable("OPENAI_API_KEY")
-    SUPER_CHARGED = logger._get_env_variable("SUPER_CHARGED")
-    MODEL = logger._get_env_variable("MODEL")
+    logger_instance = Logger()
+    logger = logger_instance.get_logger()
+
+    # If the values are not provided as arguments, fetch them from the environment
+    openai_api_key = openai_api_key or os.getenv("OPENAI_API_KEY")
+    model = model or os.getenv("MODEL")
+    super_charged = super_charged or os.getenv("SUPER_CHARGED")
+
+    logger.info(f"MODEL: {model}")
+    censored_key = format_string(openai_api_key)
+    logger.info(f"OPENAI_API_KEY: {censored_key}")
+
     # Initialize a content generator
-    content_generator = ContentGenerator(MODEL, OPENAI_API_KEY, SUPER_CHARGED)
+    content_generator = ContentGenerator(model, openai_api_key, super_charged)
+
     # Get user's question
-    prompt_message = "Enter your question in one to two sentences. Try to make it as accurate, concise and salient as possible:\n"
+    prompt_message = "Enter your question in one to two sentences. Try to make it as accurate, concise, and salient as possible:\n"
     colored_prompt = colored(prompt_message, 'green')
     main_user_question = input(colored_prompt)
+
     final_output = content_generator.compile(main_user_question)
 
     if len(final_output) > 1:
-        #print(colored("PROMPT PRODUCED FOR YOUR PERSONAL USE:\n", 'magenta'))
-        #print(colored(final_output[0], 'green'))
-        #print(colored('ANSWER TO YOUR QUESTION:\n', 'magenta'))
-        #print(colored(final_output[1], 'green'))
+        print(colored("Success! Please evaluate your results against a trusted source.", 'green'))
+    else:
+        logger.error("Error occurred while parsing final output, perhaps index-related, perhaps incorrect function call.")
+        exit(1)
+
+    if len(final_output) > 1:
         return final_output[1]
     else:
-        print(colored("Error occurred.", 'red'))
+        logger.error("Error occurred.")
         exit(1)
 
 def interactive_mode(self, query: str, prompt_num: Optional[int]) -> None:
@@ -163,11 +182,6 @@ class Query:
             if query.lower() == 'exit':
                 break
 
-    # Again, this is a hypothetical method. You'll need to define/implement it or adjust as needed.
-    def generate_completion(self, conversation_history):
-        # Your code for generating completions goes here
-        pass
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--query", type=str, help="Run this command to query a particular System Message with a user message as many times as you like.")
@@ -176,4 +190,5 @@ if __name__ == "__main__":
     parser.add_argument("--model", type=str, help="Model chosen from OpenAI.")
     parser.add_argument("--super_charged", action="store_true", help="Super charged mode for GPT-4 - increases prompt quality.")
     args = parser.parse_args()
-    main()
+
+    main(args.query, args.openai_api_key, args.model, args.super_charged)

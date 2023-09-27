@@ -4,22 +4,16 @@
 
 It is cheap, requires running a single command, and has interactivity features, logging, and more.
 
-By employing iterative prompting techniques and tree-of-thought, gpt-3.5-turbo model - which is incredibly cheap to use - produces surprisingly high quality System Messages which can then be used for more powerful models, like gpt-4 or gpt-3.5-turbo-16k. 
+By employing iterative prompting techniques and tree-of-thought, gpt-3.5-turbo model - which is incredibly cheap to use - produces surprisingly high quality System Messages which can then be used for more powerful models, like gpt-4 or gpt-3.5-turbo-16k.
 
+The results are startling: just one sentence can result in - while slower responses - much cheaper, and equally powerful results as compared to ChatGPT 4, GPT-4-0314, GPT-4 and other state-of-the-art LLMs.
 
-## Example Usage Images
-
-1. First Usage
-   ![First Usage](resources/example_usage_images/First%20Usage.png)
-
-2. How to Input
-   ![How to Input](resources/example_usage_images/How%20to%20input.png)
-
-3. Final Output Example (Costs less than 0.01 USD)
-   ![Final Output Example](resources/example_usage_images/Final%20Output%20Example%20(Costs%20less%20than%200.01%20USD).png)
+This has been tested with about a sample size of 20, and I'd love to hear feedback!
 
 
 ## Usage on Ubuntu or WSL
+
+0. Setup a venv!
 
 1. Run `pip install -r requirements.txt`
 
@@ -41,36 +35,22 @@ By employing iterative prompting techniques and tree-of-thought, gpt-3.5-turbo m
 
 This will prompt you for user input for context generation, then it will generate and print the final system message. The final system message will be saved to a text file in the /prompts/ directory in the script's directory. The text files are named prompt_N.txt, where N is a number that increments with each run of the script.
 
-## Extras
-
-To use interactive mode, use the --query argument followed by your query:
-
-`python3 system-msg-maker.py --query "Your query here"`
-
-In interactive mode, the script will generate a response to your query using the latest system message saved in the /prompts/ directory. You can continue the conversation by entering new queries, and the conversation history will be updated and saved back to the file. Type exit to quit interactive mode.
-
-You can also use the --num argument to specify a particular prompt file to use for the conversation:
-
-`python3 system-msg-maker.py --query "Your query here" --num 2`
-
-This will use the system message saved in prompt_2.txt for the conversation.
-
-Finally, the --task argument can be used to modify the tree-of-thought component of the system message:
-
-`python3 system-msg-maker.py --task`
-
-When the --task argument is used, the tree-of-thought component will be changed to a task-oriented version. This argument can be combined with the --query and --num arguments.
-
-Please replace `"Your query here"` with your actual query. Also, note that the paths in the commands are relative to the current working directory. Make sure to adjust them according to your actual file structure. This will be fixed soon.
-
 
 # TO DO
 - Better input validation
 - More expansive options
-- More steerability
 - Integration into langchain
 - Portability and overall design integration
-- Internet access
+- Internet connectivity coming soon
+- Further optimizations and selective GPT-4 usage options coming soon
+- Binary Search Tree encoding and vectorization to come soon (hosting issues!)
+- More steerability and interactivity
+- Rotational prompts coming soon
+- Add queries/continuation
+- Fine-tune usage of more powerful language models
+- Fix flags
+- Chat history! Free of training data theft
+- Logging & advanced debug output (and suppression)
 
 # RECENTLY ADDED
 - Better documentation

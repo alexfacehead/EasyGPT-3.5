@@ -19,7 +19,7 @@ class Logger:
 
             # Set up logging
             os.makedirs(log_dir, exist_ok=True)
-            log_file = os.path.join(log_dir, 'log_example.txt')
+            log_file = os.path.join(log_dir, 'log.txt')
             logging.basicConfig(filename=log_file, 
                                 level=logging.INFO, 
                                 format='%(asctime)s %(levelname)s %(name)s %(message)s')

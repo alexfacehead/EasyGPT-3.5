@@ -1,6 +1,10 @@
 # Necessary?
-SYSTEM_MESSAGE_FORMAT_QUERIES = ("You are to assist your user in formatting tasks. "
-                                 "Heed their queries carefully.")
+
+# STEP 0: FORMAT QUESTION IN CASE OF GRAMMATICAL ERRORS
+QUESTION_FIXER_PART_ONE = """Thank you for your question! I appreciate your inquiry and would like to provide a suggestion to improve its grammatical correctness, clarity, and overall readability. Here's a revised version of your question with the necessary corrections. I will also remove any outer quotes or outer backticks:\n\n"""
+
+# STEP 0.1: SECOND HALF OF FORMATTING
+QUESTION_FIXER_PART_TWO = """\n\nI hope this revised version accurately captures your intended meaning and clarifies any potential ambiguities. Thank you for letting me assist you, and I hope the result is to your satisfaction: improved and with any outer quotes or backticks removed."""
 
 # STEP 1: CONTEXT GENERATOR
 AUTOMATED_CONTEXT_CALLER = ("In the context of large language models and their applications, consider "
@@ -29,28 +33,40 @@ CONTEXT_EXPANSION = ("[INTRO]:\n"
                      "must also be high quality. Overall, aim for less of a list format, and more of a coherent organization.")
 
 #STEP 3: TWO PARTS (with user-derived context in between)
-TREE_OF_THOUGHT_MAKER_FIRST_HALF = ("[MAIN GOAL]:\n"
-                         "You will integrate a System Message with a 'tree-of-thought' such that the system message "
-                         "becomes targeted at three experts, and serves a user given the context. Try to ensure that "
-                         "the System Message produced is as lengthy as possible whilst maintaining coherency and "
-                         "relevancy to [CONTEXT] below. Err on the side of overly lengthy rather than too much brevity.\n\n"
-                         "[INTRO]:\n"
-                         "You will integrate a System Message with a 'tree-of-thought' such that the system message "
-                         "becomes intertwined with the concept of \"three experts,\" and serves a user given the context. "
-                         "You must design it in such a way, given your ability, that it best serves a user.")
+TREE_OF_THOUGHT_MAKER_FIRST_HALF = (
+    "[MAIN GOAL]:\n"
+    "You will integrate a System Message with a 'tree-of-thought' such that the "
+    "system message becomes targeted at three experts, and serves a user given the "
+    "context. Try to ensure that the System Message produced is as lengthy as possible "
+    "whilst maintaining coherency and relevancy to [CONTEXT] below. Err on the side of "
+    "slightly lengthy, but do not carry out the [TREE OF THOUGHT] instructions regarded "
+    "below themselves: rather, prime a message for question answering.\n\n"
+    
+    "[INTRO]:\n"
+    "You will integrate a System Message with a 'tree-of-thought' such that the "
+    "\"system message becomes intertwined with the concept of \'three experts,\' and "
+    "serves a user given the context. You must design it in such a way, given your "
+    "ability, that it best serves a user.\n\n")
 
 # CONTEXT FALLS IN BETWEEN
 
 #STEP 3.1:
-TREE_OF_THOUGHT_MAKER_SECOND_HALF = ("[MAIN GOAL]:\n"
-                         "You will integrate a System Message with a 'tree-of-thought' such that the system message "
-                         "becomes targeted at three experts, and serves a user given the context. Try to ensure that "
-                         "the System Message produced is as lengthy as possible whilst maintaining coherency and "
-                         "relevancy to [CONTEXT] below. Err on the side of overly lengthy rather than too much brevity.\n\n"
-                         "[INTRO]:\n"
-                         "You will integrate a System Message with a 'tree-of-thought' such that the system message "
-                         "becomes intertwined with the concept of \"three experts,\" and serves a user given the context. "
-                         "You must design it in such a way, given your ability, that it best serves a user.")
+TREE_OF_THOUGHT_MAKER_SECOND_HALF = (
+    "[TREE-OF-THOUGHT] (only to be INTEGRATED with above [CONTEXT]):\n"
+    "Imagine three different experts with distinct sets of skills are answering a "
+    "user-submitted question. All experts will write down 1 step of their thinking, "
+    "then share it with the group. Then all experts will go on to the next step, "
+    "repeating this act. If any expert realizes they're wrong at any point then they leave.\n\n"
+    
+    "[FINAL NOTES]\n"
+    "Remember to seamlessly integrate these components such that it flows perfectly: "
+    "you are the world's utmost designer, organizer and writer for language model System "
+    "Messages (the most powerful form of steerability for AI). Your ONLY goal is to produce "
+    "a System Message: Do not, under any circumstances, carry out the instructions themselves - "
+    "but do produce a lengthy prompt that helps direct your user perfectly. Simply produce guidance "
+    "without extraneous joviality, and rather, pure accuracy and reason\n\n"
+    
+    "Your System Message should not start with [SYSTEM MESSAGE].")
 
 # Less important
 GPT_4_OPTIMIZER = ("As the supreme prompt enhancer, your task is to elevate user prompts to their peak "

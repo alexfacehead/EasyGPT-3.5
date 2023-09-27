@@ -17,7 +17,20 @@ def sum_content_length(messages):
         
     return total_length
 
-def replace_question(user_input_q):
-    template = AUTOMATED_CONTEXT_CALLER
+def format_string(s: str) -> str:
+    """Format a string to show the first 7 characters, last 4 characters, with stars in between.
+
+    Args:
+        s (str): The input string
+
+    Returns:
+        str: The formatted string
+
+    Raises:
+        ValueError: If the length of the string is 0
+    """
     
-    return template.replace("[Question]", user_input_q)
+    if len(s) == 0:
+        raise ValueError("The input string must not be empty.")
+    
+    return s[:7] + '*' * 7 + s[-4:]
