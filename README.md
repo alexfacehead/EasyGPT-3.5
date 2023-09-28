@@ -1,8 +1,8 @@
 # System Message Maker (With Tree-of-Thought for Vastly Improved Quality With Only gpt-3.5-turbo)
 
-## **With just a SINGLE sentence**, this script generates a highly optimized System Message for LLMs using OpenAI's GPT-3 model, with high quality answers on par with ChatGPT 4.
+## **With just a SINGLE sentence**, this script generates a highly optimized System Message for LLMs using OpenAI's much weaker gpt-3.5-turbo-16k model, with high quality answers almost on par with ChatGPT 4.
 
-It is cheap, requires running a single command, and has interactivity features, logging, and more.
+It is **very** cheap, requires running a single command, and has interactivity features, logging, and more.
 
 By employing iterative prompting techniques and tree-of-thought, gpt-3.5-turbo model - which is incredibly cheap to use - produces surprisingly high quality System Messages which can then be used for more powerful models, like gpt-4 or gpt-3.5-turbo-16k.
 
@@ -10,34 +10,41 @@ The results are startling: just one sentence can result in - while slower respon
 
 This has been tested with about a sample size of 20, and I'd love to hear feedback!
 
+## Use cases
+- Generate a prompt or answer that can then be used with ChatGPT for excellent results, thereby saving money
+- Extract content and ideas that only take one single sentence
+- Save money but get quality results
+
 ## Usage on Ubuntu or WSL
 
 0. Setup a venv. If you do not know how to do this, skip to the bottom.
 
 1. Run `pip install -r requirements.txt`
 
-2. Execute `export OPENAI_API_KEY=your_actual_key_here` in a session (or set the value of `OPENAI_API_KEY` in the `.env.template` file and rename it to `.env`)
+2. Set the value of `OPENAI_API_KEY` in the `.env.template` file and rename it to `.env`
+ - This will be fixed soon so that you may export or use flags.
 
 3. Run the script without any arguments to generate a new system message:
 
-`python system-msg-maker.py`
+`python EasyGPT-3.5.py`
 
 ## Usage on macOS
 
 1. Run `pip install -r requirements.txt` or `pip3 install -r requirements.txt` if you have both Python 2 and Python 3 installed.
 
-2. Execute `export OPENAI_API_KEY=your_actual_key_here` in a terminal session (or set the value of `OPENAI_API_KEY` in the `.env.template` file and rename it to `.env`)
+2. Set the value of `OPENAI_API_KEY` in the `.env.template` file and rename it to `.env`
 
-3. Run the script without any arguments to generate a new system message:
+3. Run the script without any arguments to generate a new System Message, iteratively, slowly, but CHEAPLY, and receive an answer almost on-par with ChatGPT 4.
 
-`python system-msg-maker.py` or `python3 system-msg-maker.py` if you have both Python 2 and Python 3 installed.
+`python EasyGPT-3,5` or `python3 EasyGPT-3,5` if you have both Python 2 and Python 3 installed.
 
-This will prompt you for user input for context generation, then it will generate and print the final system message. The final system message will be printed, but not saved, to a directory.
+You may need to use python3, it depends on your speciifc setup.
+
+**This will prompt you for user input for context generation**, then it will generate and print the final System Message **and answer**. The final system message will be printed, but not saved, to a directory. Work in progress.
 
 Logging is soon to come, but the information and answers output are invaluable.
 
 Simple fixes to this will be introduced soon.
-
 
 # TO DO IN ORDER OF PRIORITY
 - Internet connectivity
@@ -52,15 +59,16 @@ Simple fixes to this will be introduced soon.
 - Rotational prompts (so as to reduce token overusage)
 - Beautiful UI!
 - Agentification (complex workflows)
+- Reduce censorship (LOW PRIORITY)
 
 
 # RECENTLY ADDED
-- Unit testing. Usage is described at the end of this README
-- Better documentation
-- Removed clutter
-- Added better instruction
+- Streamlined, easy-to-use Unit Testing!! Usage is described in the **VENV** section right near bottom.
+- Removeing clutter
+- Added better instructions
+- Experimenting with ultra-optimization
 - Unit testing for tangible metrics (in-progress)
-- Super-charge option [NOT WOKRING]
+- Super-charge option [NOT WOKRING FOR NON-GPT-4 USERS]
 
 (Please replace your_actual_key_here with your actual OpenAI API key in `.env.template` and rename it to `.env`.)
 
