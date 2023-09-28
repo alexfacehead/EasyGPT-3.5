@@ -34,3 +34,20 @@ def format_string(s: str) -> str:
         raise ValueError("The input string must not be empty.")
     
     return s[:7] + '*' * 7 + s[-4:]
+
+def compile_unit_test_prompts(directory='.'):
+    from pathlib import Path
+    # Using pathlib to work with files
+    directory_path = Path(directory)
+    
+    # List all files that match the given pattern
+    files = [f for f in directory_path.iterdir() if f.name.startswith('temperature_') and f.name.endswith('.txt')]
+    
+    # Sort the files based on the float value after the last underscore
+    files.sort(key=lambda x: float(x.stem.rsplit('_', 1)[-1]))
+
+    # Using a single file write operation to write all contents at once
+    with (directory_path / 'compilation.txt').open('w') as output_file:
+        # List comprehension to build the contents for the compilation
+        contents = [f"{file.name}:\n{file.read_text()}\n\n" for file in files]
+        output_file.write(''.join(contents))

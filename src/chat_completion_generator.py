@@ -7,7 +7,7 @@ import openai
 from termcolor import colored
 from typing import Optional
 from typing import List
-from src.utils.helpers import sum_content_length
+from src.utils.helpers import sum_content_length, format_string
 from src.utils.logs_and_env import Logger
 
 logger = Logger()
@@ -31,7 +31,6 @@ class ChatCompletionGenerator:
         self.model = model if model else MODEL
         self.super_charged = super_charged if super_charged else SUPER_CHARGED
         openai.api_key = self.openai_api_key
-
     def generate_completion(self, messages: List[dict], model: Optional[str]=MODEL, temperature: Optional[float]=0.33) -> str:
         print(colored(f"\nMODEL ACTUALLY BEING USED: {model}\n", 'red'))
         """

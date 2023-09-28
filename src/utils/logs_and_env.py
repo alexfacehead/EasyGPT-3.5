@@ -2,6 +2,8 @@ from typing import Optional
 import os
 import logging
 from dotenv import load_dotenv
+from termcolor import colored
+from src.utils.helpers import format_string
 
 class Logger:
     _instance = None  # Singleton instance
@@ -29,6 +31,7 @@ class Logger:
             self.OPENAI_API_KEY = self._get_env_variable('OPENAI_API_KEY')
             self.MODEL = self._get_env_variable('MODEL')
             self.SUPER_CHARGED = self._get_env_variable('SUPER_CHARGED')
+            print(colored(f"OPENAI_API_KEY DETECTED: {format_string(self.OPENAI_API_KEY)}", 'red'))
 
             for key in ['OPENAI_API_KEY', 'MODEL', 'SUPER_CHARGED']:
                 if not getattr(self, key):

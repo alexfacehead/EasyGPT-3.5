@@ -39,28 +39,31 @@ Logging is soon to come, but the information and answers output are invaluable.
 Simple fixes to this will be introduced soon.
 
 
-# TO DO
-- Better input validation
-- More expansive options
-- Integration into langchain
-- Portability and overall design integration
-- Internet connectivity coming soon
-- Further optimizations and selective GPT-4 usage options coming soon! Manual for now
-- Binary Search Tree encoding and vectorization to come soon (hosting issues!)
-- More steerability and interactivity
-- Rotational prompts coming soon
-- Add queries/continuation
-- Fix flags
+# TO DO IN ORDER OF PRIORITY
+- Internet connectivity
+- Fix flags and arguments
+- More steerability and continuous querying
 - Chat history! Free of training data theft
 - Logging & advanced debug output (and suppression)
+- Portability and overall design integration with other LLMs
+- More expansive options: adaptable, automated hyperparameters based on context
+- Binary Search Tree encoding and vectorization to come soon (hosting issues!)
+- Integration with LangChain
+- Rotational prompts (so as to reduce token overusage)
+- Beautiful UI!
+- Agentification (complex workflows)
+
 
 # RECENTLY ADDED
+- Unit testing. Usage is described at the end of this README
 - Better documentation
-- Super-charge option (for those with gpt-4 acccess)
 - Removed clutter
-- Added better instructions
+- Added better instruction
+- Unit testing for tangible metrics (in-progress)
+- Super-charge option [NOT WOKRING]
 
-(Please replace your_actual_key_here with your actual OpenAI API key.)
+(Please replace your_actual_key_here with your actual OpenAI API key in `.env.template` and rename it to `.env`.)
+
 (This README.md was optimized with GPT-4)
 
 # VENV
@@ -114,3 +117,26 @@ Simple fixes to this will be introduced soon.
 
 *Note:* For projects requiring different Python versions or dependencies, repeat the steps to create a new virtual environment.
 
+### Unit Testing (Contributions GREATLY welcomed - ALL confidential)
+
+Use the `TestContentGenerator` for unit testing the performance of the `ContentGenerator` from the `src.content_creator` module.
+
+#### Overview
+- Generate content based on various temperatures.
+- Record timestamp, temperature, and elapsed time.
+- Store results in a specified directory.
+
+#### Flags Explanation
+- `--question_test`: This specifies the question or prompt for the content generator test. Default is "What is the consensus on climate change?"
+- `--temp_start_value`: This specifies which temperature value you'd like to start at. Default is 0.1. 
+- `--temp_range`: Defines how many incremental temperature steps you'd like to test, starting from the `temp_start_value`. Default is 20.
+- `--save_dir`: Directory where you want to save the test results. Default is "src/unit_testing/unit_test_results/".
+
+#### Running the Test
+From the root project directory, use:
+
+```bash
+python3 -m src.unit_testing.run_tests --question_test "What's 1+1?" --temp_start_value=0.1 --temp_range=10
+```
+
+`This README.md was optmized with GPT-4.`

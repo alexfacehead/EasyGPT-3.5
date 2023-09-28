@@ -1,6 +1,7 @@
 from typing import Optional, Tuple
-from src.utils.constants import QUESTION_FIXER_PART_ONE, QUESTION_FIXER_PART_TWO, CONTEXT_EXPANSION, TREE_OF_THOUGHT_MAKER_SECOND_HALF, TREE_OF_THOUGHT_MAKER_FIRST_HALF, AUTOMATED_CONTEXT_CALLER
-from src.utils.helpers import sum_content_length
+from src.utils.constants import FILE_FORMATTER, QUESTION_FIXER_PART_ONE, QUESTION_FIXER_PART_TWO,\
+    CONTEXT_EXPANSION, TREE_OF_THOUGHT_MAKER_SECOND_HALF, TREE_OF_THOUGHT_MAKER_FIRST_HALF,\
+        AUTOMATED_CONTEXT_CALLER
 from src.chat_completion_generator import ChatCompletionGenerator
 from src.utils.logs_and_env import Logger
 from termcolor import colored
@@ -11,7 +12,7 @@ MODEL = logger._get_env_variable("MODEL")
 SUPER_CHARGED = logger._get_env_variable("SUPER_CHARGED")
 
 class ContentGenerator:
-    def __init__(self, prompt_num: Optional[int] = None, model: Optional[str] = None, super_charged: Optional[str] = None, default_compilation: Optional[str] = "", temperature: Optional[float] = 0.33):
+    def __init__(self, prompt_num: Optional[int] = None, model: Optional[str] = None, super_charged: Optional[str] = None, default_compilation: Optional[str] = "", temperature: Optional[float] = 0.33, irrelevant_content: Optional[bool] = False):
         """
         Constructor for the ContentGenerator class
         
@@ -28,14 +29,19 @@ class ContentGenerator:
         self.openai_api_key = OPENAI_API_KEY
         self.model = MODEL
         self.super_charged = SUPER_CHARGED
+        self.irrelevant_content = irrelevant_content
+        self.temperature = temperature
         
         # Initialize a gpt-3.5-turbo chat completer
         self.chat_completer_big = ChatCompletionGenerator(temperature=temperature, prompt_num=prompt_num, openai_api_key=OPENAI_API_KEY, model="gpt-3.5-turbo-16k", super_charged=super_charged)
         
         # Initialize a gpt-4-0314 chat completer (more powerful)
         self.chat_completer_small = ChatCompletionGenerator(prompt_num=prompt_num, openai_api_key=OPENAI_API_KEY, model="gpt-3.5-turbo-16k", super_charged=super_charged, temperature=temperature)
-        print(colored("CURRENT TEMPERATURE:", 'cyan'))
-        print(colored(f"{temperature}", 'red', attrs=['bold']))
+        if self.irrelevant_content == True:
+            print(colored("CURRENT TEMPERATURE:", 'cyan'))
+            print(colored(f"{self.temperature}", 'red', attrs=['bold']))
+        else:
+            return
 
     def perfect_question(self, user_input_question: str):
         total_fixer_prompt = QUESTION_FIXER_PART_ONE + user_input_question + QUESTION_FIXER_PART_TWO
@@ -93,3 +99,7 @@ class ContentGenerator:
         # Retrieve a final answer
         final_answer = self.get_final_answer(tree_of_thought_final, perfected_question)
         return [tree_of_thought_final, final_answer]
+    
+    def format_file_name(self, user_input_question: str) -> str:
+        formatted_file_name = self.chat_completer_big.generate_completion([{"role": "system", "content": FILE_FORMATTER}, {"role": "user", "content": user_input_question}])
+        return formatted_file_name

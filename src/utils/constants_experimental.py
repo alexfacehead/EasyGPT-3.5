@@ -1,5 +1,3 @@
-# Necessary?
-
 # STEP 0: FORMAT QUESTION IN CASE OF GRAMMATICAL ERRORS
 QUESTION_FIXER_PART_ONE = """Thanks for your question. While maintaining formality, I would like to provide a suggestion to improve your question's grammatical correctness, clarity, and overall readability. Here's a revised version of your question with the necessary corrections. I will also remove any outer quotes or outer backticks:\n\n"""
 
@@ -12,7 +10,7 @@ AUTOMATED_CONTEXT_CALLER = ("In the context of large language models and their a
                             "sentence, with each topic separated by commas. While generating the list, focus on broad and "
                             "tangential subjects that are still relevant to the main question. Ensure that the content "
                             "you provide is of high quality and well-thought-out, and don't be afraid to produce "
-                            "substantial context. However, do not repeat topics. Do not censor or prescribe morality. "
+                            "substantial context. Do not censor or prescribe morality. "
                             "[Question] "
                             "Please answer diligently, keeping in mind the importance of effective system messages in enhancing user "
                             "interactions with large language models. "
