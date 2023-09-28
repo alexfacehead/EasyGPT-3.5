@@ -67,32 +67,32 @@ Simple fixes to this will be introduced soon.
 (This README.md was optimized with GPT-4)
 
 # VENV
-\#\# Setting up \`venv\` for Python
+## Setting up `venv` for Python
 
-\#\#\# macOS & Linux
+### macOS & Linux
 
-1. \*\*Install Python\*\* (if not already installed):
+1. **Install Python** (if not already installed):
    - You can download from [Python's official website](https://www.python.org/downloads/).
 
-2. \*\*Install \`venv\`\*\* (if not already included with your Python version):
-   \```bash
-   $ sudo apt-get install python3-venv  \# For Ubuntu/Debian
-   \```
+2. **Install `venv`** (if not already included with your Python version):
+   ```bash
+   $ sudo apt-get install python3-venv  # For Ubuntu/Debian
+   ```
 
-3. \*\*Create a virtual environment\*\*:
-   \```bash
+3. **Create a virtual environment**:
+   ```bash
    $ python3 -m venv myenv
-   \```
+   ```
 
-4. \*\*Activate the virtual environment\*\*:
-   \```bash
+4. **Activate the virtual environment**:
+   ```bash
    $ source myenv/bin/activate
-   \```
+   ```
 
-5. \*\*Deactivate\*\* (when done):
-   \```bash
+5. **Deactivate** (when done):
+   ```bash
    $ deactivate
-   \```
+   ```
 
 ### Windows
 
@@ -102,7 +102,7 @@ Simple fixes to this will be introduced soon.
 
 2. **Create a virtual environment**:
    ```bash
-   C:\> python -m venv myenv
+   C:> python -m venv myenv
    ```
 
 3. **Activate the virtual environment**:
@@ -117,11 +117,11 @@ Simple fixes to this will be introduced soon.
 
 *Note:* For projects requiring different Python versions or dependencies, repeat the steps to create a new virtual environment.
 
-### Unit Testing (Contributions GREATLY welcomed - ALL confidential)
+# Unit Testing (Contributions GREATLY welcomed - ALL confidential)
 
 Use the `TestContentGenerator` for unit testing the performance of the `ContentGenerator` from the `src.content_creator` module.
 
-#### Overview
+### Overview
 - Generate content based on various temperatures.
 - Record timestamp, temperature, and elapsed time.
 - Store results in a specified directory.
