@@ -47,8 +47,9 @@ Logging is soon to come, but the information and answers output are invaluable.
 Simple fixes to this will be introduced soon.
 
 # TO DO IN ORDER OF PRIORITY
+- Update error handling (ex: no `--temperature-50.0` flag)
 - Internet connectivity
-- Fix flags and arguments
+- Fix flags and arguments, switch to pytest instead of unittest (high priority)
 - More steerability and continuous querying
 - Chat history! Free of training data theft
 - Logging & advanced debug output (and suppression)

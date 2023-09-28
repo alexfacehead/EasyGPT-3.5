@@ -21,6 +21,11 @@ def main(query: Optional[str] = None,
     super_charged = get_argument(super_charged, os.getenv("SUPER_CHARGED") == 'True')
     temperature = get_argument(temperature, args.temperature)
     
+    if temperature != None:
+        print(colored(f"TEMPERATURE CHOSEN: {temperature}\n", 'red'))
+    else:
+        print(colored(f"TEMPERATURE: 0.33\n", 'red'))
+
     # Create a Logger and Initialize Env Vars
     logger_instance = Logger()
     logger = logger_instance.get_logger()

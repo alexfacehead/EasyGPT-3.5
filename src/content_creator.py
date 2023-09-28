@@ -1,5 +1,5 @@
 from typing import Optional, Tuple
-from src.utils.constants import FILE_FORMATTER, QUESTION_FIXER_PART_ONE, QUESTION_FIXER_PART_TWO,\
+from src.utils.constants_experimental import FILE_FORMATTER, QUESTION_FIXER_PART_ONE, QUESTION_FIXER_PART_TWO,\
     CONTEXT_EXPANSION, TREE_OF_THOUGHT_MAKER_SECOND_HALF, TREE_OF_THOUGHT_MAKER_FIRST_HALF,\
         AUTOMATED_CONTEXT_CALLER
 from src.chat_completion_generator import ChatCompletionGenerator
