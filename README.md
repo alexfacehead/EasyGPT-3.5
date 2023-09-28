@@ -26,7 +26,7 @@ This has been tested with about a sample size of 20, and I'd love to hear feedba
 
 3. Run the script without any arguments to generate a new system message:
 
-`python EasyGPT-3.5.py`
+`python EasyGPT-3.5.py` or `python3 EasyGPT-3.5.py` or whatever Python version you use.
 
 ## Usage on macOS
 
