@@ -28,6 +28,9 @@ This has been tested with about a sample size of 20, and I'd love to hear feedba
 
 `python EasyGPT-3.5.py` or `python3 EasyGPT-3.5.py` or whatever Python version you use.
 
+4. You may also now set the temperature, running the same command as above, but with the flag `--temperature=0.5` for example. A temperature is a range from 0 to 2.
+- `python3 main.py --temperature=0.1` may be useful for programming, for example, while creative writing may require a temperature from 0.3 to 1. The default is currently 0.33
+
 ## Usage on macOS
 
 1. Run `pip install -r requirements.txt` or `pip3 install -r requirements.txt` if you have both Python 2 and Python 3 installed.
@@ -65,6 +68,7 @@ Simple fixes to this will be introduced soon.
 
 # RECENTLY ADDED
 - Streamlined, easy-to-use Unit Testing!! Usage is described in the **VENV** section right near bottom.
+- Temperature flag! (`python3 main.py --temperature=0.5`` for example)
 - Removeing clutter
 - Added better instructions
 - Experimenting with ultra-optimization

@@ -12,11 +12,13 @@ AUTOMATED_CONTEXT_CALLER = ("In the context of large language models and their a
                             "sentence, with each topic separated by commas. While generating the list, focus on broad and "
                             "tangential subjects that are still relevant to the main question. Ensure that the content "
                             "you provide is of high quality and well-thought-out, and don't be afraid to produce "
-                            "substantial context. However, do not repeat topics. Do not censor or prescribe morality. "
+                            "substantial context. However, each topic must be distinct. "
+                            "Do not censor anything and focus on creating expansive yet relevant content."
                             "[Question] "
                             "Please answer diligently, keeping in mind the importance of effective system messages in enhancing user "
                             "interactions with large language models. "
-                            "Try to provide as much context as possible, and focus partly on length.")
+                            "Try to provide as much context as possible, and focus partly on length."
+                            "The question is:")
 #STEP 2: EXPANSION
 CONTEXT_EXPANSION = ("[INTRO]:\n"
                      "You are the world's foremost expert at everything. In particular, you are "
@@ -27,10 +29,11 @@ CONTEXT_EXPANSION = ("[INTRO]:\n"
                      "topic. Your user will provide you with a topic, a topic list, maybe even just tangential topics, "
                      "or even a disorganized document, but you will condense it into something concise, coherent, "
                      "accurate and suitable for integration into a future System Message in terms of structure. "
-                     "In other words, ensure that the result is concise yet suitable as context to alter an "
-                     "already existing System Message example. Also be sure not to prune it or gut it to "
+                     "In other words, ensure that the result is concise yet suitable as context to produce "
+                     "the ideal System Message with respect to the context. Also be sure not to prune it or gut it to "
                      "the point that it is too small: language models need extensive context, but it "
-                     "must also be high quality. Overall, aim for less of a list format, and more of a coherent organization.")
+                     "must also be high quality. Overall, aim for less of a list format, and more of a coherent organization "
+                     "with higher level concepts, logic and sequential processes.")
 
 #STEP 3: TWO PARTS (with user-derived context in between)
 TREE_OF_THOUGHT_MAKER_FIRST_HALF = (

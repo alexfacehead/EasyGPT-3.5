@@ -45,6 +45,7 @@ class ContentGenerator:
 
     def perfect_question(self, user_input_question: str):
         total_fixer_prompt = QUESTION_FIXER_PART_ONE + user_input_question + QUESTION_FIXER_PART_TWO
+        print(colored(total_fixer_prompt, 'yellow'))
         fixed_user_input_question = self.chat_completer_big.generate_completion([{"role": "system", "content": total_fixer_prompt}])
         return fixed_user_input_question
 
@@ -52,6 +53,8 @@ class ContentGenerator:
         if user_input_question == "":
             print(colored("NO QUESTION PROVIDED", 'red'))
             exit(1)
+        full_input_for_context = AUTOMATED_CONTEXT_CALLER + "\n\n" + user_input_question
+        print(colored(full_input_for_context, 'yellow'))
         initial_context = self.chat_completer_small.generate_completion([{"role": "system", "content": AUTOMATED_CONTEXT_CALLER}, {"role": "user", "content": user_input_question}])
         return initial_context
 

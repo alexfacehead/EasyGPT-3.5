@@ -14,12 +14,14 @@ class TestContentGenerator(unittest.TestCase):
         parser.add_argument('--temp_start_value', type=float, help="This specifies which temperature value you'd like to start at. Default is 0.1, lowest possible is 0. Be wary of running too many test cases.", default=0.1)
         parser.add_argument('--temp_range', type=int, help="Specify the range for which you would like to test LLM temperatures. Higher numbers mean more test cases, up to 2.0.", default=20)
         parser.add_argument('--save_dir', type=str, help="Directory to save the unit test results", default="src/unit_testing/unit_test_results/")
+        parser.add_argument('--repeat', type=int, help="Repeat the question as many times as you like. Input is an integer.", default=1)
         args = parser.parse_args()
 
         question = args.question_test
         temp_start_value = args.temp_start_value
         temp_range = args.temp_range
         save_dir = args.save_dir
+        repeat = args.repeat
 
         # Ensure save directory exists and handle duplicates
         if (not os.path.exists(save_dir)) or (os.path.exists(save_dir) and len(os.listdir(save_dir)) > 200):
