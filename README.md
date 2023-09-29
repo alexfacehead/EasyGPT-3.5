@@ -31,6 +31,20 @@ This has been tested with about a sample size of 20, and I'd love to hear feedba
 4. You may also now set the temperature, running the same command as above, but with the flag `--temperature=0.5` for example. A temperature is a range from 0 to 2.
 - `python3 main.py --temperature=0.1` may be useful for programming, for example, while creative writing may require a temperature from 0.3 to 1. The default is currently 0.33
 
+### Example Flags / Args
+`-h, --help            show this help message and exit
+  --query_mode QUERY_MODE
+                        Enter True or False to continue asking questions in this context.
+  --temperature TEMPERATURE
+                        Higher value is more random/creative.
+  --openai_api_key OPENAI_API_KEY
+                        Your OPENAI_API_KEY
+  --model MODEL         Your chosen OpenAI model [NOT WORKING!!!!!!]
+  --super_charged SUPER_CHARGED
+                        If you have access to GPT-4, empowers results [coming soon]
+  --prompt_dir PROMPT_DIR
+                        The directory for which you'd like to save your prompts and answer histories.`
+
 ## Usage on macOS
 
 1. Run `pip install -r requirements.txt` or `pip3 install -r requirements.txt` if you have both Python 2 and Python 3 installed.
@@ -50,11 +64,11 @@ Logging is soon to come, but the information and answers output are invaluable.
 Simple fixes to this will be introduced soon.
 
 # TO DO IN ORDER OF PRIORITY
-- Update error handling (ex: no `--temperature-50.0` flag)
+- Update error handling
 - Internet connectivity
-- Fix flags and arguments, switch to pytest instead of unittest (high priority)
-- More steerability and continuous querying
-- Logging & advanced debug output (and suppression)
+- Fix chosen MODEL flags / args
+- CONTINUOUS querying
+- Better lgging & advanced debug output (and suppression)
 - Portability and overall design integration with other LLMs
 - More expansive options: adaptable, automated hyperparameters based on context
 - Binary Search Tree encoding and vectorization to come soon (hosting issues!)
@@ -66,10 +80,10 @@ Simple fixes to this will be introduced soon.
 
 
 # RECENTLY ADDED
-- Successive querying so you can continue to interact with the prompt generated
+- Extra querying so you can continue to interact with the prompt generated (`--query=True`` flag)
 - Streamlined, easy-to-use Unit Testing!! Usage is described in the **VENV** section right near bottom.
 - Temperature flag! (`python3 main.py --temperature=0.5`` for example)
-- Removing clutter, restructuring modules
+- Removing clutter, restructuring modules, much better prompts
 - Added better instructions
 - Experimenting with ultra-optimization
 - Unit testing for tangible metrics (in-progress)
