@@ -32,18 +32,21 @@ This has been tested with about a sample size of 20, and I'd love to hear feedba
 - `python3 main.py --temperature=0.1` may be useful for programming, for example, while creative writing may require a temperature from 0.3 to 1. The default is currently 0.33
 
 ### Example Flags / Args
+<pre>
 -h, --help            show this help message and exit
-  --query_mode QUERY_MODE
+--query_mode QUERY_MODE
                         Enter True or False to continue asking questions in this context.
-  --temperature TEMPERATURE
+--temperature TEMPERATURE
                         Higher value is more random/creative.
-  --openai_api_key OPENAI_API_KEY
+--openai_api_key OPENAI_API_KEY
                         Your OPENAI_API_KEY
-  --model MODEL         Your chosen OpenAI model [NOT WORKING!!!!!!]
-  --super_charged SUPER_CHARGED
+--model MODEL         Your chosen OpenAI model [NOT WORKING!!!!!!]
+--super_charged SUPER_CHARGED
                         If you have access to GPT-4, empowers results [coming soon]
-  --prompt_dir PROMPT_DIR
+--prompt_dir PROMPT_DIR
                         The directory for which you'd like to save your prompts and answer histories.
+</pre>
+
 
 
 ## Usage on macOS
