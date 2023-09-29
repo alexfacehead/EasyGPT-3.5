@@ -1,6 +1,8 @@
 import argparse
 import os
 import json
+import re
+
 from typing import Optional
 from termcolor import colored
 
@@ -11,7 +13,7 @@ from src.utils.helpers import format_string
 def get_argument(value, default):
     return value if value is not None else default
 
-def main(query: Optional[str] = None,
+def main(query_mode: Optional[bool] = None,
          openai_api_key: Optional[str] = None,
          model: Optional[str] = None,
          super_charged: Optional[bool] = False,
@@ -22,7 +24,7 @@ def main(query: Optional[str] = None,
     model = get_argument(model, os.getenv("MODEL"))
     super_charged = get_argument(super_charged, os.getenv("SUPER_CHARGED") == 'True')
     temperature = get_argument(temperature, args.temperature)
-    query = get_argument(query, args.query)
+    query_mode = get_argument(query_mode, args.query_mode)
     prompt_dir = get_argument(prompt_dir, args.prompt_dir)
 
     run_num = 0
@@ -47,6 +49,16 @@ def main(query: Optional[str] = None,
     prompt_message = "Enter your question in one to two sentences. Try to make it as accurate, concise, and salient as possible:\n"
     colored_prompt = colored(prompt_message, 'green')
     main_user_question = input(colored_prompt + "\n" + colored("ENTER QUESTION HERE: ", 'red', attrs=['bold']))
+    
+    def get_highest_run_num(directory):
+        highest_run_num = 0
+        for filename in os.listdir(directory):
+            match = re.match(r'prompt_and_answer_(\d+)\.txt', filename)
+            if match:
+                run_num = int(match.group(1))
+                highest_run_num = max(highest_run_num, run_num)
+        return highest_run_num
+
     def ensure_directory_exists(directory):
         if not os.path.exists(directory):
             os.makedirs(directory)
@@ -64,12 +76,21 @@ def main(query: Optional[str] = None,
         with open(filename, 'w') as file:
             json.dump(content, file, indent=2)
 
+    def add_user_question(json_output, user_question):
+        # Create a new dictionary for the user's question
+        user_question_dict = {
+            "role": "user",
+            "content": user_question
+        }
+        return user_question
+
     # Get final output, and save it for interactive querying
     final_output = content_generator.compile(main_user_question)
     saved_combined_content = [{"role": "system", "content": final_output[0]}, {"role": "user", "content": final_output[1]}]
 
     # Assuming prompt_dir and run_num are defined
     save_content(prompt_dir, 'prompt_and_answer', run_num, saved_combined_content)
+    run_num = get_highest_run_num(prompt_dir) + 1
 
     if len(final_output) > 1:
         print(colored("Success! Please evaluate your results against a trusted source.", 'green'))
@@ -77,15 +98,21 @@ def main(query: Optional[str] = None,
         logger.error("Error occurred while parsing final output, perhaps index-related, perhaps incorrect function call.")
         exit(1)
 
-    if len(final_output) > 1:
-        return final_output[1]
-    else:
-        logger.error("Error occurred.")
-        exit(1)
+    next_question = input(colored_prompt + "\n" + colored("ENTER NEXT QUERY HERE (or type exit to quit): ", 'red', attrs=['bold']))
+    next_user_input = str.lower(next_question)
+    if next_user_input != exit:
+        latest_file_name = f"{prompt_dir}/prompt_and_answer_{run_num - 1}.txt"  # Assuming the files are 0-indexed
+        with open(latest_file_name, 'r') as file:
+            json_file_output = json.load(file)
+            json_file_output.append({"role": "user", "content": next_question})
+            next_output = content_generator.generate_plain_completion(json_file_output, next_question)
+            next_answer = "Answer to your next question:\n\n" + add_user_question(json_file_output, next_output)
+            print(colored(next_answer, 'magenta'))
+    
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Your script description here")
-    parser.add_argument("--query", type=str, help="Enter your next question here, which will continue from the last prompts, rotationally deleting older results for context preservation.")
+    parser = argparse.ArgumentParser(description="An easier and far cheaper way to use the gpt-3.5-turbo API, with results nearly comparable to ChatGPT 4 - with more additions coming soon!")
+    parser.add_argument("--query_mode", type=bool, help="Enter True or False to continue asking questions in this context.")
     parser.add_argument("--temperature", type=float, help="Higher value is more random/creative.")
     parser.add_argument("--openai_api_key", type=str, help="Your OPENAI_API_KEY")
     parser.add_argument("--model", type=str, help="Your chosen OpenAI model")
@@ -94,7 +121,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
     
     main(
-        query=args.query,
+        query_mode=args.query_mode,
         temperature=args.temperature,
         openai_api_key=args.openai_api_key,
         model=args.model,

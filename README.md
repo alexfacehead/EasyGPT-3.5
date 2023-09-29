@@ -54,22 +54,22 @@ Simple fixes to this will be introduced soon.
 - Internet connectivity
 - Fix flags and arguments, switch to pytest instead of unittest (high priority)
 - More steerability and continuous querying
-- Chat history! Free of training data theft
 - Logging & advanced debug output (and suppression)
 - Portability and overall design integration with other LLMs
 - More expansive options: adaptable, automated hyperparameters based on context
 - Binary Search Tree encoding and vectorization to come soon (hosting issues!)
 - Integration with LangChain
-- Rotational prompts (so as to reduce token overusage)
+- Rotational prompts (almost there)
 - Beautiful UI!
 - Agentification (complex workflows)
 - Reduce censorship (LOW PRIORITY)
 
 
 # RECENTLY ADDED
+- Successive querying so you can continue to interact with the prompt generated
 - Streamlined, easy-to-use Unit Testing!! Usage is described in the **VENV** section right near bottom.
 - Temperature flag! (`python3 main.py --temperature=0.5`` for example)
-- Removeing clutter
+- Removing clutter, restructuring modules
 - Added better instructions
 - Experimenting with ultra-optimization
 - Unit testing for tangible metrics (in-progress)

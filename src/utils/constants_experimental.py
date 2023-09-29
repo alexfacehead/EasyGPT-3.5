@@ -13,8 +13,8 @@ AUTOMATED_CONTEXT_CALLER = ("Consider "
                             " \n\nDo not stray from the question at hand, and be sure to "
                             "produce a list of *distinct* topics, meaning no repetition. "
                             "Please answer diligently, keeping in mind the importance of a high quality topic list. "
-                            "Try to provide a list of as many relevant-to-the-question topics as possible, and focus partly on length "
-                            "so we have a decent amount of context.\n\nThe question for which to produce a relevant list of comma-separated, distinct topics is:")
+                            "Try to provide a list of a reasonable number of relevant-to-the-question topics as possible, and ensure they are distinct."
+                            "\n\nThe question for which to produce a relevant list of comma-separated, distinct topics is:")
 #STEP 2: EXPANSION
 CONTEXT_EXPANSION = ("[INTRO]:\n"
                      "You are the world's foremost expert at everything. In particular, you are "

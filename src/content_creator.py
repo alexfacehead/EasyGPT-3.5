@@ -5,6 +5,7 @@ from src.utils.constants_experimental import FILE_FORMATTER, QUESTION_FIXER_PART
 from src.chat_completion_generator import ChatCompletionGenerator
 from src.utils.logs_and_env import Logger
 from termcolor import colored
+import json
 
 logger = Logger()
 OPENAI_API_KEY = logger._get_env_variable("OPENAI_API_KEY")
@@ -42,6 +43,30 @@ class ContentGenerator:
             print(colored(f"{self.temperature}", 'red', attrs=['bold']))
         else:
             return
+
+    from typing import List, Dict
+
+    def generate_plain_completion(self, json_file_input: List[Dict[str, str]], query: str):
+        # Ensure json_file_input is not empty and is a list
+        if not json_file_input or not isinstance(json_file_input, list):
+            print(colored("INVALID CONVERSATION HISTORY", 'red'))
+            return None
+
+        # Get the last system and user messages from the conversation history
+        last_system_message = json_file_input[-2]['content'] if len(json_file_input) > 1 else ""
+        last_user_message = json_file_input[-1]['content'] if json_file_input else ""
+
+        # Combine the last system message, last user message, and new user query into one string
+        full_input_for_completion = f"{last_system_message}\n{last_user_message}\n{query}"
+
+        # Generate a new completion using the chat_completer_small
+        new_completion = self.chat_completer_small.generate_completion([
+            {"role": "system", "content": last_system_message},
+            {"role": "user", "content": last_user_message + "\n" + query}
+        ])
+
+        return new_completion
+
 
     def perfect_question(self, user_input_question: str):
         total_fixer_prompt = QUESTION_FIXER_PART_ONE + user_input_question + QUESTION_FIXER_PART_TWO
