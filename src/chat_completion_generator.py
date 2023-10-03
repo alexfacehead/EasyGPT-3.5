@@ -7,16 +7,17 @@ import openai
 from termcolor import colored
 from typing import Optional
 from typing import List
-from src.utils.helpers import sum_content_length, format_string
-from src.utils.logs_and_env import Logger
+from src.utils.helpers import sum_content_length
+from src.utils.logging import Logger
+from src.utils.env_setup import EnvironmentSetup
 
-logger = Logger()
-OPENAI_API_KEY = logger._get_env_variable('OPENAI_API_KEY')
-MODEL = logger._get_env_variable('MODEL')
-SUPER_CHARGED = logger._get_env_variable('SUPER_CHARGED')
+
+log_obj = Logger()
+logger = log_obj.get_logger()
+env_and_flags = EnvironmentSetup()
 
 class ChatCompletionGenerator:
-    def __init__(self, temperature: Optional[float]=0.33, prompt_num: Optional[int] = 0, openai_api_key: Optional[str] = OPENAI_API_KEY, model: Optional[str] = MODEL, super_charged: Optional[str] = SUPER_CHARGED, default_compilation: Optional[str] = ""):
+    def __init__(self, temperature: Optional[float]=env_and_flags.temperature, prompt_num: Optional[int] = 0, openai_api_key: Optional[str] = env_and_flags.openai_api_key, model: Optional[str] = env_and_flags.model, super_charged: Optional[str] = env_and_flags.super_charged):
         """
         Constructor for the SystemMessageMaker class.
         
@@ -27,14 +28,14 @@ class ChatCompletionGenerator:
             super_charged (str, optional): The super charged mode for GPT-4. Defaults to None.
         """
         self.prompt_num = prompt_num
-        self.openai_api_key = openai_api_key if openai_api_key else OPENAI_API_KEY
-        self.model = model if model else MODEL
-        self.super_charged = super_charged if super_charged else SUPER_CHARGED
+        self.openai_api_key = env_and_flags.openai_api_key
+        self.model = env_and_flags.model
+        self.super_charged = env_and_flags.super_charged
         openai.api_key = self.openai_api_key
-        self.temperature = temperature
-    def generate_completion(self, messages: List[dict], model: Optional[str]=MODEL, temperature: Optional[float]=0.38) -> str:
-        print(colored(f"\nMODEL ACTUALLY BEING USED: {model}", 'red'))
-        #print(colored(f"TEMPERATURE:: {self.temperaturel}\n", 'red'))
+        self.temperature = env_and_flags.temperature
+
+    def generate_completion(self, model, messages: List[dict], temperature: Optional[float]=0.33) -> str:
+        logger.log(1, "MODEL ACTUALLY BEING USED: {model}")
         """
         Generates a completion using OpenAI's ChatCompletion API.
 

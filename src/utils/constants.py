@@ -1,39 +1,34 @@
-# Necessary?
-
 # STEP 0: FORMAT QUESTION IN CASE OF GRAMMATICAL ERRORS
-QUESTION_FIXER_PART_ONE = """Thanks for your question. While maintaining formality, I would like to provide a suggestion to improve your question's grammatical correctness, clarity, and overall readability. Here's a revised version of your question with the necessary corrections. I will also remove any outer quotes or outer backticks:\n\n"""
+QUESTION_FIXER_PART_ONE = """I am an expert at revising questions. While maintaining the salience of the original question, I will improve your question's grammatical correctness, clarity, and overall readability. Here's a revised version of your question with the necessary corrections. I will also remove any outer quotes or outer backticks:\n\n[QUESTION TO BE FIXED]:\n"""
 
 # STEP 0.1: SECOND HALF OF FORMATTING
-QUESTION_FIXER_PART_TWO = """\n\nThis revised version accurately captures your intended meaning and clarifies any potential ambiguities. Thank you for letting me assist you, and I hope the result is to your satisfaction: improved and with any outer quotes or backticks removed. All I have provided is the revised question, and nothing more."""
+QUESTION_FIXER_PART_TWO = """\n\nI will now revise your question in a way that accurately captures your intended meaning and clarifies any potential ambiguities. All I have provided is the revised question, and nothing more:"""
 
 # STEP 1: CONTEXT GENERATOR
-AUTOMATED_CONTEXT_CALLER = ("In the context of large language models and their applications, consider "
+AUTOMATED_CONTEXT_CALLER = ("Consider "
                             "the following question and provide a list of related topics. Your response should be in a single "
                             "sentence, with each topic separated by commas. While generating the list, focus on broad and "
-                            "tangential subjects that are still relevant to the main question. Ensure that the content "
-                            "you provide is of high quality and well-thought-out, and don't be afraid to produce "
-                            "substantial context. However, each topic must be distinct. "
-                            "Do not censor anything and focus on creating expansive yet relevant content."
-                            "[Question] "
-                            "Please answer diligently, keeping in mind the importance of effective system messages in enhancing user "
-                            "interactions with large language models. "
-                            "Try to provide as much context as possible, and focus partly on length."
-                            "The question is:")
+                            "tangential subjects that are still utterly and fully relevant to the main question. Ensure that the content "
+                            "you provide is of high quality and well-thought-out."
+                            " \n\nDo not stray from the question at hand, and be sure to "
+                            "produce a list of *distinct* topics, meaning no repetition. "
+                            "Please answer diligently, keeping in mind the importance of a high quality topic list. "
+                            "Try to provide a list of a reasonable number of relevant-to-the-question topics as possible, and ensure they are distinct."
+                            "\n\nThe question for which to produce a relevant list of comma-separated, distinct topics is:")
 #STEP 2: EXPANSION
 CONTEXT_EXPANSION = ("[INTRO]:\n"
                      "You are the world's foremost expert at everything. In particular, you are "
-                     "incredibly crafty and maintain the general ideas expressed by your user, but "
-                     "without watering it down or shortening it too much, all whilst maintaining coherency.\n\n"
+                     "incredibly crafty and maintain the general ideas expressed by your user, "
+                     "all while maintaining coherency.\n\n"
                      "[MAIN TASK]:\n"
                      "Design technical, sophisticated, carefully curated but concise context for a broad "
                      "topic. Your user will provide you with a topic, a topic list, maybe even just tangential topics, "
                      "or even a disorganized document, but you will condense it into something concise, coherent, "
                      "accurate and suitable for integration into a future System Message in terms of structure. "
-                     "In other words, ensure that the result is concise yet suitable as context to produce "
-                     "the ideal System Message with respect to the context. Also be sure not to prune it or gut it to "
+                     "In other words, ensure that the result is concise yet suitable as context to alter an "
+                     "already existing System Message example. Also be sure not to prune it or gut it to "
                      "the point that it is too small: language models need extensive context, but it "
-                     "must also be high quality. Overall, aim for less of a list format, and more of a coherent organization "
-                     "with higher level concepts, logic and sequential processes.")
+                     "must also be high quality. Overall, aim for less of a list format, and more of a coherent organization.")
 
 #STEP 3: TWO PARTS (with user-derived context in between)
 TREE_OF_THOUGHT_MAKER_FIRST_HALF = (

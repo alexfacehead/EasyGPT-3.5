@@ -5,3 +5,5 @@ logs/
 __pycache__
 resources/prompts
 resources/units2
+file_structure.sh
+tree_structure.sh
