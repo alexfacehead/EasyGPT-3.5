@@ -49,14 +49,16 @@ def main(
     prompt_message = "Enter your question in one to two sentences. Try to make it as accurate, concise, and salient as possible:\n"
     colored_prompt = colored(prompt_message, 'green')
     main_user_question = input(colored_prompt + "\n" + colored("ENTER QUESTION HERE: ", 'red', attrs=['bold']))
-
+    logger.info("The pre-formatted message you wrote:\n" + main_user_question)
     def add_user_question(json_output, user_question):
+        logger.info("add_user_question json list output:\n" + str(json_output))
         # Create a new dictionary for the user's question
-        user_question_dict = {
-            "role": "user",
-            "content": user_question
-        }
-        return user_question
+        my_dict = {(item['role'], item['content']): item for item in json_output}
+        user_question_dict = my_dict
+        my_dict["content"] = user_question
+        logger.info("User question added to dictionary history:\n" + user_question_dict["content"])
+        logger.info("Current, full dictionary state:\n" + str(user_question_dict)) # Log Next Dict State
+        return user_question_dict["content"]
 
     # Get final output, and save it for interactive querying
     final_output = content_generator.compile(main_user_question)
@@ -69,7 +71,7 @@ def main(
     if len(final_output) > 1:
         print(colored("Success! Please evaluate your results against a trusted source.", 'green'))
     else:
-        logger.error("Error occurred while parsing final output, perhaps index-related, perhaps incorrect function call or possibly context was too long.")
+        logger.log(logger.error, ("Error occurred while parsing final output, perhaps index-related, perhaps incorrect function call or possibly context was too long."))
         exit(1)
 
     if env_and_flags.query_mode == True:
@@ -83,6 +85,7 @@ def main(
                 next_output = content_generator.generate_plain_completion(json_file_output, next_question)
                 next_answer = "Answer to your next question:\n\n" + add_user_question(json_file_output, next_output)
                 print(colored(next_answer, 'magenta'))
+                logger.info("Generated next answer:\n" + next_answer)
         else:
             print("Program completed.")
     else:

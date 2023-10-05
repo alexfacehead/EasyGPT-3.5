@@ -4,7 +4,7 @@
 
 It is **very** cheap, requires running a single command, and has interactivity features, logging, and more.
 
-By employing iterative prompting techniques and tree-of-thought, gpt-3.5-turbo model - which is incredibly cheap to use - produces surprisingly high quality System Messages which can then be used for more powerful models, like gpt-4 or gpt-3.5-turbo-16k.
+By employing iterative prompting techniques and tree-of-thought, the gpt-3.5-turbo-16k model - which is incredibly cheap to use - produces surprisingly high quality System Messages which can then be used for more powerful models, like gpt-4 or gpt-3.5-turbo-16k.
 
 The results are startling: just one sentence can result in - while slower responses - much cheaper, and equally powerful results as compared to ChatGPT 4, GPT-4-0314, GPT-4 and other state-of-the-art LLMs.
 
@@ -14,6 +14,7 @@ This has been tested with about a sample size of 20, and I'd love to hear feedba
 - Generate a prompt or answer that can then be used with ChatGPT for excellent results, thereby saving money
 - Extract content and ideas that only take one single sentence
 - Save money but get quality results
+- Math questions (GPT-4-0314 or GPT keys adviced)
 
 ## Usage on Ubuntu or WSL
 
@@ -68,30 +69,32 @@ Logging is soon to come, but the information and answers output are invaluable.
 Simple fixes to this will be introduced soon.
 
 # TO DO IN ORDER OF PRIORITY
+- Fine tuning for 3.5 (on tangible metrics)
+- Rate queries with GPT-4 (assess whether one is equal to the other: 3.5, 4), assign values, prove statistical significance
 - Update error handling
 - Internet connectivity
-- Fix chosen MODEL flags / args
 - CONTINUOUS querying
 - Better lgging & advanced debug output (and suppression)
 - Portability and overall design integration with other LLMs
-- More expansive options: adaptable, automated hyperparameters based on context
-- Binary Search Tree encoding and vectorization to come soon (hosting issues!)
+- More expansive options: adaptable, automated hyperparameters based on context (make a call on the 2nd context as to whether this would require a more creative answer or a more logical and precise answer, then alter temperatures)
+- Binary Search Tree encoding and vectorization to come soon to save more money on expensive APIs(hosting issues!)
 - Integration with LangChain
 - Rotational prompts (almost there)
 - Beautiful UI!
 - Agentification (complex workflows)
 - Reduce censorship (LOW PRIORITY)
+- Experimenting with ultra-optimization (ultra_charge flag to come soon: iterative initial prompt improvement based on feedback)
+- super_charge option working in general!
 
 
 # RECENTLY ADDED
-- Extra querying so you can continue to interact with the prompt generated (`--query=True`` flag)
+- Querying & .env completely compatble now (`--help` or `--h` for list of flags)
 - Streamlined, easy-to-use Unit Testing!! Usage is described in the **VENV** section right near bottom.
-- Temperature flag! (`python3 main.py --temperature=0.5`` for example)
-- Removing clutter, restructuring modules, much better prompts
-- Added better instructions
-- Experimenting with ultra-optimization
-- Unit testing for tangible metrics (in-progress)
-- Super-charge option [NOT WOKRING FOR NON-GPT-4 USERS]
+- Recatored code base and more to come (efficiency low priority due to inexpensive default)
+- Added better instructions (colorized, in Terminal)
+- Added some logging (1/10th done)
+- Unit testing for tangible metrics (WIP, coupled with Claude2 at the moemnt)
+
 
 (Please replace your_actual_key_here with your actual OpenAI API key in `.env.template` and rename it to `.env`.)
 
