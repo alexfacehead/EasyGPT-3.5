@@ -52,9 +52,3 @@ def compile_unit_test_prompts(directory='.'):
         # List comprehension to build the contents for the compilation
         contents = [f"{file.name}:\n{file.read_text()}\n\n" for file in files]
         output_file.write(''.join(contents))
-
-    def save_content(directory, base_filename, run_num, content):
-        ensure_directory_exists(directory)
-        filename = get_next_available_filename(directory, base_filename, run_num)
-        with open(filename, 'w') as file:
-            json.dump(content, file, indent=2)

@@ -151,7 +151,7 @@ Simple fixes to this will be introduced soon.
 
 *Note:* For projects requiring different Python versions or dependencies, repeat the steps to create a new virtual environment.
 
-# Unit Testing (Contributions GREATLY welcomed - ALL confidential)
+# [BROKEN!!!!!!!!! DO NOT USE!!!!] Unit Testing (Contributions GREATLY welcomed - ALL confidential)
 
 Use the `TestContentGenerator` for unit testing the performance of the `ContentGenerator` from the `src.content_creator` module.
 

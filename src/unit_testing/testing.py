@@ -2,7 +2,7 @@ import unittest
 import time
 import argparse
 import os
-from src.content_creator import ContentGenerator
+from src.content_generator import ContentGenerator
 #from src.utils.helpers import compile_unit_test_prompts
 
 class TestContentGenerator(unittest.TestCase):
