@@ -7,7 +7,7 @@ def sum_content_length(messages: json):
     
     Args:
         messages (list of dict): List of message dictionaries.
-    
+
     Returns:
         int: The total length of all content strings.
     """
