@@ -35,7 +35,7 @@ class ChatCompletionGenerator:
         self.temperature = env_and_flags.temperature
 
     def generate_completion(self, model, messages: List[dict], temperature: Optional[float]=0.33) -> str:
-        logger.log(1, "MODEL ACTUALLY BEING USED: {model}")
+        logger.info(f"MODEL ACTUALLY BEING USED: {model}")
         """
         Generates a completion using OpenAI's ChatCompletion API.
 

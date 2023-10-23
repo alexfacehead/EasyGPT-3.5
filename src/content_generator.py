@@ -7,7 +7,8 @@ from src.utils.logging import Logger
 from termcolor import colored
 from src.utils.env_setup import EnvironmentSetup
 
-logger = Logger()
+log_obj = Logger()
+logger = log_obj.get_logger()
 env_and_flags = EnvironmentSetup()
 
 class ContentGenerator:
@@ -51,8 +52,8 @@ class ContentGenerator:
         # Combine the last system message, last user message, and new user query into one string
         full_input_for_completion = f"{last_system_message}\n{last_user_message}\n{query}"
 
-        # Generate a new completion using the chat_completer_small
-        new_completion = self.chat_completer_small.generate_completion(env_and_flags.model, [
+        # Generate a new completion using the chat_completer_big
+        new_completion = self.chat_completer_big.generate_completion(env_and_flags.model, [
             {"role": "system", "content": last_system_message},
             {"role": "user", "content": last_user_message + "\n" + query}
         ])
@@ -71,11 +72,11 @@ class ContentGenerator:
             exit(1)
         full_input_for_context = AUTOMATED_CONTEXT_CALLER + "\n\n" + user_input_question
         print(colored(full_input_for_context, 'yellow'))
-        initial_context = self.chat_completer_small.generate_completion(env_and_flags.model, [{"role": "system", "content": AUTOMATED_CONTEXT_CALLER}, {"role": "user", "content": user_input_question}])
+        initial_context = self.chat_completer_big.generate_completion(env_and_flags.model, [{"role": "system", "content": AUTOMATED_CONTEXT_CALLER}, {"role": "user", "content": user_input_question}])
         return initial_context
 
     def expand_context(self, initial_context: str):
-        expanded_context = self.chat_completer_small.generate_completion(env_and_flags.model, [{"role": "system", "content": CONTEXT_EXPANSION}, {"role": "user", "content": initial_context}])
+        expanded_context = self.chat_completer_big.generate_completion(env_and_flags.model, [{"role": "system", "content": CONTEXT_EXPANSION}, {"role": "user", "content": initial_context}])
         return expanded_context
 
     def make_tree_of_thought_final(self, expanded_context: str):
@@ -83,6 +84,8 @@ class ContentGenerator:
         tree_of_thought_final = self.chat_completer_big.generate_completion(env_and_flags.model, [{"role": "system", "content": total_system_message_input}])
         print(colored("Final Tree of Thought Prompt:\n", 'magenta'))
         print(colored(tree_of_thought_final + "\n", 'green'))
+        logger.info(f"Tree Of Thought Generated:\n")
+        logger.info(f"{tree_of_thought_final}")
         return tree_of_thought_final
 
     def get_final_answer(self, tree_of_thought_final: str, user_question: str):
@@ -92,6 +95,8 @@ class ContentGenerator:
         final_answer = self.chat_completer_big.generate_completion(env_and_flags.model, [{"role": "system", "content": tree_of_thought_final}, {"role": "user", "content": updated_user_question}])
         print(colored("Generated answer:\n", 'magenta'))
         print(colored(final_answer, 'magenta'))
+        logger.info(f"Tree Of Thought Generated:\n")
+        logger.info(f"{final_answer}")
         return final_answer
 
     def compile(self, user_input_question) -> Tuple:

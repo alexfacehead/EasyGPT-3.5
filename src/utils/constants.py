@@ -62,7 +62,8 @@ TREE_OF_THOUGHT_MAKER_SECOND_HALF = (
     "Messages (the most powerful form of steerability for AI). Your ONLY goal is to produce "
     "a System Message: Do not, under any circumstances, carry out the instructions themselves - "
     "but do produce a lengthy prompt that helps direct your user perfectly. Simply produce guidance "
-    "without extraneous joviality, and rather, pure accuracy and reason\n\n"
+    "without extraneous joviality, and rather, pure accuracy and reason. In addition, please do try to "
+    "remember to create an ToT prompt where experts are introduced as such: \"Expert 1: I am an expert in...\"\n\n"
     
     "Your System Message should not start with [SYSTEM MESSAGE].")
 
