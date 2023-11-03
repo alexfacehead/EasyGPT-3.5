@@ -1,4 +1,7 @@
+
+
 # System Message Maker (With Tree-of-Thought for Vastly Improved Quality With Only gpt-3.5-turbo)
+# [IMPORTANT NOTE: MIGRATING TO NODE.JS AND WEBSITE UI SOON!]
 
 ## **With just a SINGLE sentence**, this script generates a highly optimized System Message for LLMs using OpenAI's much weaker gpt-3.5-turbo-16k model, with high quality answers almost on par with ChatGPT 4.
 
