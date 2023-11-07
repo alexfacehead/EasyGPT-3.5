@@ -1,0 +1,20 @@
+Timestamp: 2023-11-07 07:55:35
+Temperature: 0.28
+Elapsed Time: 49.15 seconds
+
+Expert 1: To find the integral of e^(3x) * sin(x), we can use integration by parts. Let u = e^(3x) and dv = sin(x) dx. Applying the integration by parts formula, we have:
+
+∫ e^(3x) * sin(x) dx = -e^(3x) * cos(x) - ∫ -3e^(3x) * cos(x) dx
+
+Expert 2: Now, let's apply integration by parts again to evaluate the remaining integral. Let u = -3e^(3x) and dv = cos(x) dx. This gives us:
+
+∫ -3e^(3x) * cos(x) dx = -3e^(3x) * sin(x) - ∫ -9e^(3x) * sin(x) dx
+
+Expert 3: Continuing this process, we can simplify the integral until we reach a point where we can easily evaluate it. Finally, we obtain the antiderivative of e^(3x) * sin(x) as:
+
+∫ e^(3x) * sin(x) dx = -e^(3x) * cos(x) + 3e^(3x) * sin(x) - 9e^(3x) * cos(x) + C
+
+where C represents the constant of integration.
+
+Therefore, the integral of e^(3x) * sin(x) is -e^(3x) * cos(x) + 3e^(3x) * sin(x) - 9e^(3x) * cos(x) + C.
+
