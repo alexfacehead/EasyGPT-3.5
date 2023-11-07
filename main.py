@@ -50,46 +50,56 @@ def main(
     colored_prompt = colored(prompt_message, 'green')
     main_user_question = input(colored_prompt + "\n" + colored("ENTER QUESTION HERE: ", 'red', attrs=['bold']))
     logger.info("The pre-formatted message you wrote:\n" + main_user_question)
-    def add_user_question(json_output, user_question):
-        logger.info("add_user_question json list output:\n" + str(json_output))
-        # Create a new dictionary for the user's question
-        my_dict = {(item['role'], item['content']): item for item in json_output}
-        user_question_dict = my_dict
-        my_dict["content"] = user_question
-        logger.info("User question added to dictionary history:\n" + user_question_dict["content"])
-        logger.info("Current, full dictionary state:\n" + str(user_question_dict)) # Log Next Dict State
-        return user_question_dict["content"]
 
     # Get final output, and save it for interactive querying
     final_output = content_generator.compile(main_user_question)
-    saved_combined_content = [{"role": "system", "content": final_output[0]}, {"role": "user", "content": final_output[1]}]
+    saved_combined_content = [{"role": "system", "content": final_output[0]}, {"role": "user", "content": main_user_question}, {"role": "assistant", "content": final_output[1]}]
 
     # Assuming prompt_dir and run_num are defined
-    FileManager.save_content(prompt_dir, 'prompt_and_answer', run_num, saved_combined_content)
     run_num = FileManager.get_highest_run_num(prompt_dir) + 1
+    FileManager.save_content(prompt_dir, 'prompt_and_answer', run_num, saved_combined_content, addition=False)
+    
+    def query_mode_caller(content_generator: ContentGenerator, prompt_dir: str, run_num: int) -> [str, bool]:
+        if env_and_flags.query_mode == True:
+            next_question = input(colored("ENTER NEXT QUERY HERE (or type exit to quit): ", 'red', attrs=['bold']))
+            if next_question.lower() != "exit":
+                latest_file_name = f"{prompt_dir}/prompt_and_answer_{run_num}.txt"  # Assuming the files are 0-indexed
+                
+                with open(latest_file_name, 'r') as file:
+                    # Load the current conversation
+                    current_dict = json.load(file)
+                    
+                    # Generate a completion with this new, full context
+                    next_answer = content_generator.generate_plain_completion(current_dict, next_question)
 
+                    # Get the next answer && append to current conversati
+                    
+                    # Return output
+                    print(colored("Answer to your next question:\n\n" + next_answer, 'magenta'))
+                    current_dict.append({"role": "user", "content": next_question})
+                    current_dict.append({"role": "assistant", "content": next_answer})
+                    FileManager.save_content(prompt_dir, file, run_num, current_dict, addition=True)
+                    
+                    # Return the message!
+                    print(colored(next_answer, 'magenta'))
+                    logger.info("Generated next answer:\n" + next_answer)
+                    run_num += 1
+                    return [next_answer, True]
+            else:
+                env_and_flags.query_mode=False
+                print("Program completed.")
+                return ["Program completed.", False]
+        else:
+            exit(0)
+
+    [return_value, user_end_or_continue] = query_mode_caller(content_generator, prompt_dir, run_num)
+    while user_end_or_continue:
+        [return_value, user_end_or_continue] = query_mode_caller(content_generator, prompt_dir, run_num)
     if len(final_output) > 1:
         print(colored("Success! Please evaluate your results against a trusted source.", 'green'))
     else:
         logger.log(logger.error, ("Error occurred while parsing final output, perhaps index-related, perhaps incorrect function call or possibly context was too long."))
         exit(1)
-
-    if env_and_flags.query_mode == True:
-        next_question = input(colored_prompt + "\n" + colored("ENTER NEXT QUERY HERE (or type exit to quit): ", 'red', attrs=['bold']))
-        if next_question.lower() != "exit":
-            print("NOT EXIT!")
-            latest_file_name = f"{prompt_dir}/prompt_and_answer_{run_num - 1}.txt"  # Assuming the files are 0-indexed
-            with open(latest_file_name, 'r') as file:
-                json_file_output = json.load(file)
-                json_file_output.append({"role": "user", "content": next_question})
-                next_output = content_generator.generate_plain_completion(json_file_output, next_question)
-                next_answer = "Answer to your next question:\n\n" + add_user_question(json_file_output, next_output)
-                print(colored(next_answer, 'magenta'))
-                logger.info("Generated next answer:\n" + next_answer)
-        else:
-            print("Program completed.")
-    else:
-        exit(0)
 
 
 if __name__ == "__main__":

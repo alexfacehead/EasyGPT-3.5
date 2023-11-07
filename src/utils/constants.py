@@ -6,8 +6,8 @@ QUESTION_FIXER_PART_TWO = """\n\nI will now revise your question in a way that a
 
 # STEP 1: CONTEXT GENERATOR
 AUTOMATED_CONTEXT_CALLER = ("Consider "
-                            "the following question and provide a list of distinct but related topics. Your response should be in a single "
-                            "sentence, with each topic separated by commas. While generating the list, focus on broad and "
+                            "the following question and provide a list of DISTINCT but related topics. Your response should be in a single "
+                            "sentence, with each topic separated by commas, with no repeats. While generating the list, focus on broad and "
                             "tangential subjects that are still utterly and fully relevant to the main question. Ensure that the content "
                             "you provide is of high quality and well-thought-out."
                             " \n\nDo not stray from the question at hand, and be sure to "
