@@ -43,6 +43,9 @@ A: Follow these steps:
 
 ## Troubleshooting
 
+### Q: I ran the program, but it hangs at some point.
+A: This is likely a temperature issue. The higher the temperature, the more random the output. As a result, we recommend using a temperature between 0.1 and 0.5, and if the program is taking longer than 30 seconds to produce output, please re-run it.
+
 ### Q: What should I do if I encounter a `ModuleNotFoundError`?
 A: Ensure that you have activated the virtual environment and installed all the required dependencies with `pip install -r requirements.txt`. If the problem persists, try deactivating (`deactivate`) and reactivating the virtual environment.
 
@@ -114,4 +117,3 @@ Before you can use the OpenAI ChatCompletions All-Model Enhancer, you need to ha
 ## Additional Support
 
 If your question isn't covered here or you need further assistance, please reach out to us at alexfacehead@hotmail.com with the subject line "EASYGPT SUPPORT", and we'll be happy to help.
-

@@ -73,7 +73,9 @@ Please provide a clear description of your changes and any additional context th
 
 Thank you for contributing to the OpenAI ChatCompletions All-Model Enhancer project! Your efforts help make this tool better for everyone.
 
-## Advanced Testing with GPT-4
+---------------------------------------------------------------
+
+# Advanced Testing with GPT-4
 
 For contributors with access to the `gpt-4-1106-preview` model and higher rate limits or RPD (requests per day), we offer a more advanced testing approach. This method involves aggregating the output from multiple unit tests into a single file, which can then be analyzed by the `gpt-4-1106-preview` model using a pre-made System Message.
 
