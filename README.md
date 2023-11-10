@@ -14,7 +14,7 @@ This project is a Python wrapper for the OpenAI ChatCompletions API. It allows y
 - [COMING SOON!!!] A fullblown website and application for mobile devices.
 
 ## Installation
-0. Have Python and venv setup at minimum.
+0. Have a Python distro (referred to hereon out as python) and venv setup at minimum.
 
 1. Clone this repository:
 
@@ -64,11 +64,9 @@ pip install -r requirements.txt
 
 ## Usage
 
-1. Set your OpenAI API key in a `.env` file:
+1. Set your OpenAI API key in a `.env` file (and rename .env.template to .env), OR excute the command:
 
-```bash
-echo "OPENAI_API_KEY=yourapikey" > .env
-```
+`export OPENAI_API_KEY=yourapikey`
 
 2. Run the main script:
 
