@@ -1,89 +1,87 @@
 # CONTRIBUTING.md
 
-Welcome to the OpenAI ChatCompletions All-Model Enhancer project! We're excited that you're interested in contributing. This document will guide you through the process of setting up your environment for development and explain how to run and write unit tests based on our source code.
+Welcome to the OpenAI ChatCompletions All-Model Enhancer project! Your interest in contributing to this innovative tool is thrilling. This document is your roadmap for setting up a development environment and understanding our unit testing framework.
 
 ## Setting Up Your Development Environment
 
-Before you can contribute, you'll need to set up your development environment. Please refer to the `README.md` and `FAQ.md` for instructions on installing `git`, `venv`, and other prerequisites.
+Embarking on your contribution journey begins with a proper setup. For guidance on installing `git`, `venv`, and other prerequisites, our `README.md` and `FAQ.md` are your trusty companions.
 
-Once you have the prerequisites installed, you can clone the repository, set up a virtual environment, and install the dependencies as described in the `README.md`.
+Once equipped with the essentials, clone the repository, breathe life into a virtual environment, and embrace the dependencies as outlined in the `README.md`.
 
 ## Running Unit Tests
 
-Unit tests are an essential part of our development process. They help ensure that new changes don't break existing functionality and that the application behaves as expected.
+Unit tests are the guardians of our codebase. They vigilantly protect against regressions and ensure the application's behavior is as expected.
 
-To run the existing unit tests, follow these steps:
+To run the existing unit tests:
 
-1. Navigate to the root directory of the project.
-2. Run the `run_tests.py` script using Python:
+1. Anchor yourself in the project's root directory.
+2. Summon the `run_tests.py` script with Python:
 
 ```bash
 python run_tests.py
 ```
 
-The `run_tests.py` script will invoke the `test_temperature_runs` function from the `src/unit_testing/testing.py` module. This function tests the application's behavior at different "top_p" values, which control the randomness of the AI's responses.
+This incantation calls upon the `test_temperature_runs` function from `src/unit_testing/testing.py`. It embarks on a quest to test the application's mettle at various "top_p" values, steering the AI's creative helm.
 
-The script uses environment variables to customize the test parameters. You can set these variables in the `.env` file or export them directly in your shell. Here are the variables used:
+Customize your test parameters through the mystical `.env` file or declare them directly in your shell's environment. The variables at play are:
 
-- `QUESTION`: The question or prompt to test with the AI.
-- `TEMP_START_VALUE`: The starting value for the "top_p" parameter.
-- `TEMP_RANGE`: The range of "top_p" values to test: this multiplies, so if your starting temp is 0.1, and range is 10, 10 tests will be run (0.1, 0.2, 0.3 ... 1.0)
-- `SAVE_DIR`: The directory where test results will be saved.
-- `REPEAT`: The number of times to repeat the test.
-- `TOP_P`: The "top_p" value for the AI's responses.
+- `QUESTION`: The enigmatic prompt for the AI's contemplation.
+- `TEMP_START_VALUE`: The "top_p" parameter's initial seed.
+- `TEMP_RANGE`: The span of "top_p" values to test, multiplying the start value up to a cap of 1.0.
+- `SAVE_DIR`: The sacred ground where test results find rest.
+- `REPEAT`: The ritual repetition of the test.
+- `TOP_P`: The AI's guiding star for response randomness.
 
 ## Writing Unit Tests
 
-When contributing new features or fixing bugs, you should also write unit tests to cover your changes. Here's a guide to writing unit tests for this project:
+As you weave new features or mend the fabric of our code, penning unit tests is a rite of passage. Here's how to honor this tradition:
 
-1. Identify the functionality that needs to be tested. This could be a new function, method, or class that you've added or modified.
-2. Create a new test function in the `src/unit_testing/testing.py` module or a new test module in the `src/unit_testing` directory.
-3. Use the `ContentGenerator` class from the `src/content_generator.py` module to simulate generating prompts with the AI.
-4. Write assertions to check that the output of the `ContentGenerator` matches the expected results.
-5. If you're testing error conditions, make sure to handle exceptions appropriately and assert that they are raised when expected.
+1. Pinpoint the essence of what requires testing, be it a nascent function, method, or class.
+2. In the `src/unit_testing/testing.py` module or within the `src/unit_testing` directory, craft a new test function or module.
+3. Employ the `ContentGenerator` from `src/content_generator.py` to mimic the AI's prompt generation.
+4. Assert that the `ContentGenerator`'s output aligns with the prophecy (expected results).
+5. When testing the abyss (error conditions), handle exceptions with care and assert their emergence as foretold.
 
-Here's an example of a simple test function:
+Behold, a test function in its simplest form:
 
 ```python
 def test_example_feature():
-    # Set up test inputs and expected outputs
+    # Prepare the offerings (test inputs and expected outputs)
     test_input = "Example input"
     expected_output = "Expected output"
     
-    # Instantiate the ContentGenerator
+    # Conjure the ContentGenerator
     content_generator = ContentGenerator()
     
-    # Run the feature being tested
+    # Challenge the feature under test
     actual_output = content_generator.some_new_feature(test_input)
     
-    # Assert that the actual output matches the expected output
-    assert actual_output == expected_output, "The new feature did not produce the expected output."
+    # Verify the actual output against the expected
+    assert actual_output == expected_output, "The new feature strayed from the expected path."
 ```
 
 ## Submitting Your Contributions
 
-Once you've made your changes and written unit tests, you can submit your contributions as follows:
+Once your masterpiece is ready and unit tests are scribed:
 
-1. Fork the repository on GitHub.
-2. Create a new branch for your changes.
-3. Commit your changes and push them to your fork.
-4. Open a pull request against the original repository.
+1. Fork the repository on the GitHub altar.
+2. Branch out to create a new narrative for your changes.
+3. Commit your tale and push it to your fork.
+4. Open a pull request to merge your story with the original repository.
 
-Please provide a clear description of your changes and any additional context that might help the maintainers understand your contribution.
+Narrate your changes with clarity and sprinkle additional context to aid the maintainers in their understanding.
 
-Thank you for contributing to the OpenAI ChatCompletions All-Model Enhancer project! Your efforts help make this tool better for everyone.
+Your contribution is a beacon of progress for the OpenAI ChatCompletions All-Model Enhancer project. We are grateful for your dedication to enhancing this tool for all.
 
 ---------------------------------------------------------------
 
 # Advanced Testing with GPT-4
 
-For contributors with access to the `gpt-4-1106-preview` model and higher rate limits or RPD (requests per day), we offer a more advanced testing approach. This method involves aggregating the output from multiple unit tests into a single file, which can then be analyzed by the `gpt-4-1106-preview` model using a pre-made System Message.
+For those blessed with access to `gpt-4-1106-preview` and bestowed with generous rate limits or RPD, a higher echelon of testing awaits. This advanced ritual involves merging the essence of multiple unit tests into a single tome for the `gpt-4-1106-preview` model to analyze with a pre-crafted System Message.
 
 ### Aggregating Test Outputs
 
-To aggregate the outputs from the `src/unit_testing/*` directory, you can use the `cat` command in Unix-based systems or its equivalent in Windows. The goal is to concatenate the contents of all unit test result files, separated by their filenames, into a single file for analysis.
-
-Here's how you can do it:
+To weave together the outputs from `src/unit_testing/*`, Unix acolytes can employ the `cat` command, while Windows disciples can invoke PowerShell. The aim is to unify the unit test scriptures, each preceded by its title, into a singular volume for analysis.
 
 #### Unix-based Systems (macOS and Linux):
 
@@ -98,7 +96,7 @@ done
 
 #### Windows:
 
-On Windows, you can use PowerShell to achieve similar results:
+In the realm of Windows, PowerShell shall serve you well:
 
 ```powershell
 cd src\unit_testing\
@@ -111,31 +109,30 @@ Get-ChildItem -Filter * | ForEach-Object {
 
 ### Analyzing Results with GPT-4
 
-Once you have the aggregated results file, you can use it as input for the `gpt-4-1106-preview` model. Create a System Message that instructs the model to analyze the test results across multiple runs. This message should guide the model to look for patterns, anomalies, or any other specific analysis you require.
+With the aggregated tome at hand, prepare it as an offering to the `gpt-4-1106-preview` model. Craft a System Message to guide the model in its quest for patterns, anomalies, and a summary of the "top_p" values' efficacy.
 
-Here's an example of how you might use the aggregated results file with a pre-made System Message:
+Here's how you might commune with the aggregated results and the pre-made System Message:
 
 ```python
 from src.content_generator import ContentGenerator
 
-# Load the aggregated results
+# Unveil the aggregated results
 with open('aggregated_results.txt', 'r') as file:
     aggregated_results = file.read()
 
-# Pre-made System Message for analysis
-Run the main application with the query:
-`Analyze the following test results from multiple runs of the OpenAI ChatCompletions All-Model Enhancer unit tests. Look for patterns in the AI's responses, any anomalies in the results, and provide a summary of the effectiveness of different 'top_p' values used during the tests. Ensure that there is space in your prompt for said results (such as [UNIT TESTING RESULTS TO-BE-ANALYZED BELOW]:`
+# The System Message, a prelude to analysis
+system_message = """
+Analyze the following test results from multiple runs of the OpenAI ChatCompletions All-Model Enhancer unit tests. Look for patterns in the AI's responses, any anomalies in the results, and provide a summary of the effectiveness of different 'top_p' values used during the tests. [UNIT TESTING RESULTS TO-BE-ANALYZED BELOW]:
+"""
 
-Utilize the generated system message  with your output, which, how to be generated, will be explained below.
-
-# Instantiate the ContentGenerator with access to gpt-4-1106-preview
+# Invoke the ContentGenerator with the wisdom of gpt-4-1106-preview
 content_generator = ContentGenerator(model='gpt-4-1106-preview')
 
-# Combine the System Message with the aggregated results
+# Merge the System Message with the aggregated results
 analysis_input = system_message + "\n\n" + aggregated_results
 
-# Generate the analysis
+# Seek the analysis
 analysis_output = content_generator.generate_plain_completion(analysis_input)
 
-# Output the analysis results
+# Reveal the analysis results
 print(analysis_output)
