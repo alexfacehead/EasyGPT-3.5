@@ -1,123 +1,98 @@
-# README.md
+# OpenAI ChatCompletions All-Model Enhancer (Cost Reduction, Quality Enhancement)
 
-# OpenAI ChatCompletions API Wrapper
+Welcome to the OpenAI ChatCompletions API Wrapper, an intuitive Python tool designed to simplify the process of generating prompts using OpenAI's powerful ChatCompletions API. This wrapper leverages the tree-of-thought prompting technique to enhance the quality of interactions with AI models. It's perfect for developers and researchers looking to explore the capabilities of language models or integrate them into their applications.
 
-This project is a Python wrapper for the OpenAI ChatCompletions API. It allows you to generate powerful prompts easily starting with a single sentence. It is built on tree-of-thought prompting, and it includes unit testing, customization, parameters, and example use cases.
+You need not produce complicated queries, but instead, simply a few sentences. All history is *privately* saved and can be used later on. With the power of the System Message, this tool enhances output substantially by iteratively producing more context.
 
-## Features
+## Key Features
 
-- Generate prompts using the OpenAI ChatCompletions API
-- Unit testing for different temperature runs
-- Customizable model, temperature, and query mode for endless conversation
-- Save generated prompts and answers
-- Query mode for interactive querying
-- [COMING SOON!!!] A fullblown website and application for mobile devices.
+- **Prompt Generation**: Utilize the ChatCompletions API to create prompts from a single sentence, or as much as you'd like.
+- **Interactive Querying**: Engage in an endless conversation with customizable query modes.
+- **Unit Testing**: Test different temperature settings to ensure robustness.
+- **Save Functionality**: Automatically save generated prompts and answers for later review.
+- **Customization**: Tailor the model, temperature, and other parameters to your needs.
+- **[COMING SOON]**: A comprehensive website and mobile application for an enhanced user experience.
 
-## Installation
-0. Have a Python distro (referred to hereon out as python) and venv setup at minimum.
+## Getting Started
 
-1. Clone this repository:
+### Prerequisites
+
+- Python 3.7 or higher
+- Virtual environment (venv)
+
+### Installation
+
+1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/yourrepository.git
+git clone https://github.com/alexfacehead/EasyGPT-3.5
+cd EasyGPT-3.5
 ```
 
-2. Navigate to the project directory:
+2. Set up a virtual environment:
 
 ```bash
-cd yourrepository
-```
-
-3. Create a virtual environment:
-
-- On macOS and Linux:
-
-```bash
+# macOS and Linux
 python3 -m venv env
-```
-
-- On Windows:
-
-```bash
-py -m venv env
-```
-
-4. Activate the virtual environment:
-
-- On macOS and Linux:
-
-```bash
 source env/bin/activate
-```
 
-- On Windows:
-
-```bash
+# Windows
+py -m venv env
 .\env\Scripts\activate
 ```
 
-5. Install the requirements:
+3. Install the required dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-## Usage
+### Configuration
 
-1. Set your OpenAI API key in a `.env` file (and rename .env.template to .env), OR excute the command:
+Rename the `.env` file based on the `.env.template` provided and populate it with your OpenAI API key and other optional settings. The only essentials are the key and model:
 
-`export OPENAI_API_KEY=yourapikey`
-
-2. Run the main script:
-
-```bash
-python main.py
+```plaintext
+OPENAI_API_KEY=yourapikey
+MODEL=gpt-3.5-turbo-16k
+TEMPERATURE=0.33
+QUERY_MODE=False
+SUPER_CHARGED=False
+PROMPT_DIR=resources/prompts
+TOP_P=0.5
 ```
 
-You can customize the model, temperature, and query mode by passing arguments to the script. For example:
+### Usage
+
+Run the main script with optional arguments (if your `.env` file is populated, you don't need flags, but flags override `.env`:
 
 ```bash
 python main.py --model="gpt-3.5-turbo-16k" --temperature=0.33 --query_mode=True
 ```
 
-3. Follow the prompts to enter your question.
+Follow the prompts to input your question. The generated content will be saved in the specified directory.
 
-4. The generated prompts and answers will be saved in the `resources/prompts` directory.
+### Running Tests
 
-5. If you enabled query mode, you can continue asking questions in the same context.
-
-6. Run the unit tests:
+To execute unit tests and generate prompts for a range of temperatures:
 
 ```bash
 python run_tests.py
 ```
 
-You can customize the question, temperature start value, temperature range, save directory, and repeat count by setting environment variables in the `.env` file.
+Customize the testing parameters by setting the appropriate environment variables in the `.env` file.
+
+## Contributing
+
+We welcome contributions from the community! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to make contributions.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Unit Testing & Contributions!
+## Support
 
-This project includes a script for running unit tests. The tests generate prompts for a range of temperatures and save the results.
+For support, questions, or to join the community, please reach out to us at alexfacehead@hotmail.com with subject line "EASYGPT"
 
-To run the unit tests, use the following command:
+## Frequently Asked Questions
 
-```bash
-python run_tests.py
-```
-
-You can customize the question, temperature start value, temperature range, save directory, and repeat count by setting environment variables in the `.env` file. For example:
-
-```bash
-echo "QUESTION='What is the meaning of life?'" >> .env
-echo "TEMP_START_VALUE=0.1" >> .env
-echo "TEMP_RANGE=10" >> .env
-echo "SAVE_DIR='src/unit_testing/unit_test_results'" >> .env
-echo "REPEAT=5" >> .env
-```
-
-After running the tests, you can view the results in the specified save directory. Each file is named with the format `temperature_X.txt`, where `X` is the temperature used for that test. The file `compilation.txt` contains a compilation of all test results.
-
-# You May Also Simply Edit The `.env.template` File And Accomplish the Same Thing For Unit Testing
+For a list of common questions and troubleshooting tips, please refer to our [FAQ.md](FAQ.md) document.
