@@ -11,6 +11,7 @@ TEMP_START_VALUE = float(os.getenv('TEMP_START_VALUE'))
 TEMP_RANGE = int(os.getenv('TEMP_RANGE'))
 SAVE_DIR = os.getenv('SAVE_DIR') if os.getenv('SAVE_DIR') is not None else str("src/unit_testing/unit_test_results")
 REPEAT = int(os.getenv('REPEAT'))
+TOP_P = float(os.getenv('TOP_P'))
 
 def main():
     # Run the tests
@@ -20,7 +21,8 @@ def main():
             temp_start_value=TEMP_START_VALUE,
             temp_range=TEMP_RANGE,
             save_dir=SAVE_DIR,
-            repeat=REPEAT
+            repeat=REPEAT,
+            top_p=TOP_P
         )
 
 if __name__ == '__main__':

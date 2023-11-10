@@ -14,6 +14,7 @@ class EnvironmentSetup:
         parser.add_argument("--openai_api_key", type=str, help="Your OPENAI_API_KEY")
         parser.add_argument("--super_charged", type=lambda x: (str(x).lower() == 'true'), help="If you have access to GPT-4, empowers results.")
         parser.add_argument("--prompt_dir", type=str, help="The directory for which you'd like to save your prompts and answer histories.", default="resources/prompts")
+        parser.add_argument("--top_p", type=float, help="Top P (sets probability for selecting from samples on LLMs)", default=0.5)
         return parser.parse_args()
 
     def __new__(cls):
@@ -33,5 +34,8 @@ class EnvironmentSetup:
         self.temperature = self.args.temperature or None
         self.query_mode = self.args.query_mode or None
         self.prompt_dir = self.args.prompt_dir or None
-        
+        self.top_p = float(os.getenv("TOP_P")) or self.args.top_p or 0.1
+        if (type(self.top_p) != float):
+            raise Exception("Issue with interpreting top_p!")
+
         self._initialized = True

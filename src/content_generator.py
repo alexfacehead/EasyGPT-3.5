@@ -12,7 +12,7 @@ logger = log_obj.get_logger()
 env_and_flags = EnvironmentSetup()
 
 class ContentGenerator:
-    def __init__(self, prompt_num: Optional[int] = None, model: Optional[str] = None, super_charged: Optional[str] = None, default_compilation: Optional[str] = "", temperature: Optional[float] = 0.33):
+    def __init__(self, prompt_num: Optional[int] = None, model: Optional[str] = None, super_charged: Optional[str] = None, default_compilation: Optional[str] = "", temperature: Optional[float] = 0.33, top_p: Optional[float] = 0.1):
         """
         Constructor for the ContentGenerator class
         
@@ -30,16 +30,17 @@ class ContentGenerator:
         self.model = env_and_flags.model
         self.super_charged = env_and_flags.super_charged
         self.temperature = temperature
+        self.top_p = top_p
         
         # Initialize a gpt-3.5-turbo chat completer
-        self.chat_completer_big = ChatCompletionGenerator(temperature=temperature, prompt_num=prompt_num, openai_api_key=self.openai_api_key, model="gpt-4-0314", super_charged=self.super_charged)
+        self.chat_completer_big = ChatCompletionGenerator(temperature=temperature, prompt_num=prompt_num, openai_api_key=self.openai_api_key, model="gpt-4-0314", super_charged=self.super_charged, top_p=self.top_p)
         
         # Initialize a gpt-4-0314 chat completer (more powerful)
-        self.chat_completer_small = ChatCompletionGenerator(prompt_num=prompt_num, openai_api_key=self.openai_api_key, model="gpt-3.5-turbo-16k", super_charged=self.super_charged, temperature=self.temperature)
+        self.chat_completer_small = ChatCompletionGenerator(prompt_num=prompt_num, openai_api_key=self.openai_api_key, model="gpt-3.5-turbo-16k", super_charged=self.super_charged, temperature=self.temperature, top_p=self.top_p)
 
     from typing import List, Dict
 
-    def generate_plain_completion(self, json_file_input: List[Dict[str, str]], query: str):
+    def generate_plain_completion(self, json_file_input: List[Dict[str, str]], query: str) -> str:
         # Ensure json_file_input is not empty and is a list
         if not json_file_input or not isinstance(json_file_input, list):
             print(colored("INVALID CONVERSATION HISTORY", 'red'))
@@ -123,5 +124,5 @@ class ContentGenerator:
         return [tree_of_thought_final, final_answer]
     
     def format_file_name(self, user_input_question: str) -> str:
-        formatted_file_name = self.chat_completer_big.generate_completion(env_and_flags.model, [{"role": "system", "content": FILE_FORMATTER}, {"role": "user", "content": user_input_question}])
+        formatted_file_name = self.chat_completer_big.generate_completion(env_and_flags.model, messages=[{"role": "system", "content": FILE_FORMATTER}, {"role": "user", "content": user_input_question}])
         return formatted_file_name
