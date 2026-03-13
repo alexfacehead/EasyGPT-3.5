@@ -1,5 +1,3 @@
-from dotenv import load_dotenv
-from typing import Optional
 import os
 import logging
 class Logger:
@@ -10,7 +8,7 @@ class Logger:
             cls._instance = super(Logger, cls).__new__(cls, *args, **kwargs)
         return cls._instance
 
-    def __init__(self, log_dir: Optional[str] = "logs/"):
+    def __init__(self, log_dir: str = "logs/"):
         # This ensures that the initialization happens only once
         if not hasattr(self, 'initialized'):
             self.initialized = True

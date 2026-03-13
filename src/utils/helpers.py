@@ -1,4 +1,3 @@
-from src.utils.constants import AUTOMATED_CONTEXT_CALLER
 import json
 
 def sum_content_length(messages: json):

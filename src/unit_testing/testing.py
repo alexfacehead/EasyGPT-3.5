@@ -1,58 +1,57 @@
-import time
-import argparse
 import os
-from src.content_generator import ContentGenerator
-from dotenv import load_dotenv
-from termcolor import colored
+import time
 
-# Load the .env file into the environment
+from termcolor import colored
+from dotenv import load_dotenv
+
+from src.content_generator import ContentGenerator
+
 load_dotenv()
 
-# Set defaults or get from environment
-QUESTION_TEST = str(os.getenv('QUESTION'))
-print(colored(QUESTION_TEST, 'red'))
-TEMP_START_VALUE = float(os.getenv('TEMP_START_VALUE'))
-TEMP_RANGE = int(os.getenv('TEMP_RANGE'))
-SAVE_DIR = os.getenv('SAVE_DIR', str("src/unit_testing/unit_test_results"))
-REPEAT = int(os.getenv('REPEAT'))
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-MODEL = str(os.getenv('MODEL'))
-TOP_P = float(os.getenv('TOP_P'))
+# Test configuration from .env
+QUESTION_TEST = os.getenv('QUESTION', '')
+TOP_P_START = float(os.getenv('TEMP_START_VALUE', '0.07'))
+TOP_P_STEPS = int(os.getenv('TEMP_RANGE', '10'))
+SAVE_DIR = os.getenv('SAVE_DIR', 'src/unit_testing/unit_test_results')
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')
+MODEL = os.getenv('MODEL', 'gpt-4')
 
-def test_temperature_runs(question=QUESTION_TEST, temp_start_value=TEMP_START_VALUE, temp_range=TEMP_RANGE, save_dir=SAVE_DIR, repeat=REPEAT, top_p=TOP_P):
 
-    # Ensure save directory exists and handle duplicates
-    if (not os.path.exists(save_dir)) or (os.path.exists(save_dir) and len(os.listdir(save_dir)) > 200):
-        os.makedirs(save_dir)
+def test_top_p_runs(question=QUESTION_TEST, top_p_start=TOP_P_START,
+                    top_p_steps=TOP_P_STEPS, save_dir=SAVE_DIR):
+    """Run the pipeline across a range of top_p values and save results."""
+    print(colored(f"Test question: {question}", 'red'))
+
+    if not isinstance(question, str) or not question:
+        raise ValueError("Question must be a non-empty string.")
+
+    # Create save directory, appending a number if it already has >200 files
+    if not os.path.exists(save_dir) or len(os.listdir(save_dir)) > 200:
+        os.makedirs(save_dir, exist_ok=True)
     else:
         count = 1
-        base_save_dir = save_dir.rstrip('/')
+        base_dir = save_dir.rstrip('/')
         while os.path.exists(save_dir):
             count += 1
-            save_dir = f"{base_save_dir}_{count}/"
+            save_dir = f"{base_dir}_{count}/"
         os.makedirs(save_dir)
 
-    simple_formatter = ContentGenerator(top_p=0.1)
-    if type(question) != str:
-        raise Exception("Fuck again!")
-    formatted_file_name = simple_formatter.format_file_name(question)
+    # Generate a filename from the question
+    formatter = ContentGenerator(api_key=OPENAI_API_KEY, model=MODEL, top_p=0.1)
+    formatted_file_name = formatter.format_file_name(question)
 
-    # Calculate the temperatures based on the inputs: limit the max to 2.0.
-    temperatures = [round(top_p * i, 2) for i in range(1, temp_range + 1)]
-    temperatures = [temp for temp in temperatures if temp <= 1.0]
+    # Calculate top_p values to test
+    top_p_values = [round(top_p_start * i, 2) for i in range(1, top_p_steps + 1)]
+    top_p_values = [v for v in top_p_values if v <= 1.0]
 
-    for temperature in temperatures:
-        content_generator = ContentGenerator(top_p=temperature)
+    for top_p in top_p_values:
+        content_generator = ContentGenerator(api_key=OPENAI_API_KEY, model=MODEL, top_p=top_p)
         start_time = time.time()
         _, final_answer = content_generator.compile(question)
-        end_time = time.time()
-        elapsed_time = end_time - start_time
+        elapsed = time.time() - start_time
 
         timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-        result = f"Timestamp: {timestamp}\nTop P: {temperature}\nElapsed Time: {elapsed_time:.2f} seconds\n\n{final_answer}\n\n"
+        result = f"Timestamp: {timestamp}\nTop P: {top_p}\nElapsed Time: {elapsed:.2f} seconds\n\n{final_answer}\n\n"
 
-        with open(f"{save_dir}/{formatted_file_name}_{temperature}.txt", "w") as f:
+        with open(f"{save_dir}/{formatted_file_name}_{top_p}.txt", "w") as f:
             f.write(result)
-
-# Run the tests
-test_temperature_runs(question=QUESTION_TEST, temp_start_value=TEMP_START_VALUE, temp_range=TEMP_RANGE, save_dir=SAVE_DIR, repeat=REPEAT, top_p=TOP_P)

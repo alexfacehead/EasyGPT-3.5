@@ -1,98 +1,102 @@
-# OpenAI ChatCompletions All-Model Enhancer (Cost Reduction, Quality Enhancement)
+# EasyGPT
 
-Welcome to the OpenAI ChatCompletions API Wrapper, an intuitive Python tool designed to simplify the process of generating prompts using OpenAI's powerful ChatCompletions API. This wrapper leverages the tree-of-thought prompting technique to enhance the quality of interactions with AI models. It's perfect for developers and researchers looking to explore the capabilities of language models or integrate them into their applications.
+A context-enrichment pipeline that iteratively builds rich background context from sparse inputs, then generates a task-adaptive system message to steer any OpenAI model toward better answers.
 
-You need not produce complicated queries, but instead, simply a few sentences. All history is *privately* saved and can be used later on. With the power of the System Message, this tool enhances output substantially by iteratively producing more context.
+## How It Works
 
-## Key Features
+The pipeline runs 5 steps on every question:
 
-- **Prompt Generation**: Utilize the ChatCompletions API to create prompts from a single sentence, or as much as you'd like.
-- **Interactive Querying**: Engage in an endless conversation with customizable query modes.
-- **Unit Testing**: Test different temperature settings to ensure robustness.
-- **Save Functionality**: Automatically save generated prompts and answers for later review.
-- **Customization**: Tailor the model, temperature, and other parameters to your needs.
-- **[COMING SOON]**: A comprehensive website and mobile application for an enhanced user experience.
+1. **Question Refinement** — fixes grammar, resolves ambiguity
+2. **Topic Generation** — produces a list of distinct, related topics
+3. **Context Expansion** — synthesizes topics into rich background prose
+4. **Adaptive System Message** — analyzes the question type (debugging, explanation, analysis, etc.) and generates a tailored system message using the expanded context
+5. **Final Answer** — answers the question with the enriched system message steering the model
 
 ## Getting Started
 
 ### Prerequisites
 
-- Python 3.7 or higher
-- Virtual environment (venv)
+- Python 3.9+
+- An OpenAI API key
 
 ### Installation
-
-1. Clone the repository:
 
 ```bash
 git clone https://github.com/alexfacehead/EasyGPT-3.5
 cd EasyGPT-3.5
-```
-
-2. Set up a virtual environment:
-
-```bash
-# macOS and Linux
-python3 -m venv env
-source env/bin/activate
-
-# Windows
-py -m venv env
-.\env\Scripts\activate
-```
-
-3. Install the required dependencies:
-
-```bash
+python3 -m venv my_venv
+source my_venv/bin/activate
 pip install -r requirements.txt
 ```
 
 ### Configuration
 
-Rename the `.env` file based on the `.env.template` provided and populate it with your OpenAI API key and other optional settings. The only essentials are the key and model:
+Copy `.env.template` to `.env` and add your API key:
 
-```plaintext
-OPENAI_API_KEY=yourapikey
-MODEL=gpt-3.5-turbo-16k
-TEMPERATURE=0.33
-QUERY_MODE=False
-SUPER_CHARGED=False
-PROMPT_DIR=resources/prompts
-TOP_P=0.5
 ```
+OPENAI_API_KEY=sk-your-key-here
+MODEL=gpt-5.1-mini
+PIPELINE_MODEL=gpt-5.1
+TEMPERATURE=0.33
+TOP_P=0.5
+QUERY_MODE=False
+```
+
+- `MODEL` — used for follow-up queries and file naming (cheaper)
+- `PIPELINE_MODEL` — used for the 5 pipeline steps (more capable)
 
 ### Usage
 
-Run the main script with optional arguments (if your `.env` file is populated, you don't need flags, but flags override `.env`:
+#### Web UI (recommended)
 
 ```bash
-python main.py --model="gpt-3.5-turbo-16k" --temperature=0.33 --query_mode=True
+streamlit run app.py
 ```
 
-Follow the prompts to input your question. The generated content will be saved in the specified directory.
+Opens a browser with a text area that handles multi-line paste (including code), shows pipeline progress, and supports follow-up chat.
+
+#### CLI
+
+```bash
+python main.py
+```
+
+Optional flags (override `.env`):
+
+```bash
+python main.py --model gpt-5.1-mini --pipeline_model gpt-5.1 --temperature 0.33 --query_mode
+```
 
 ### Running Tests
 
-To execute unit tests and generate prompts for a range of temperatures:
+Test the pipeline across a range of `top_p` values:
 
 ```bash
 python run_tests.py
 ```
 
-Customize the testing parameters by setting the appropriate environment variables in the `.env` file.
+Configure test parameters in `.env`:
+
+```
+QUESTION='What is the integral of e^3x?'
+TEMP_START_VALUE=0.07
+TEMP_RANGE=10
+SAVE_DIR=src/unit_testing/unit_test_results
+REPEAT=1
+```
 
 ## Contributing
 
-We welcome contributions from the community! Please read our [CONTRIBUTING.md](CONTRIBUTING.md) file for guidelines on how to make contributions.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT — see [LICENSE](LICENSE).
 
 ## Support
 
-For support, questions, or to join the community, please reach out to us at alexfacehead@hotmail.com with subject line "EASYGPT"
+For questions, reach out at alexfacehead@hotmail.com with subject line "EASYGPT".
 
-## Frequently Asked Questions
+## FAQ
 
-For a list of common questions and troubleshooting tips, please refer to our [FAQ.md](FAQ.md) document.
+See [FAQ.md](FAQ.md).

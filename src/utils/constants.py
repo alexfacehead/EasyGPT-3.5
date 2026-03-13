@@ -1,96 +1,70 @@
-# STEP 0: FORMAT QUESTION IN CASE OF GRAMMATICAL ERRORS
-QUESTION_FIXER_PART_ONE = """I am an expert at revising questions. While maintaining the salience of the original question, I will improve your question's grammatical correctness, clarity, and overall readability. Here's a revised version of your question with the necessary corrections. I will also remove any outer quotes or outer backticks:\n\n[QUESTION TO BE FIXED]:\n"""
+# STEP 0: FORMAT QUESTION
+QUESTION_FIXER_PART_ONE = (
+    "Revise the following question for grammatical correctness, clarity, and readability "
+    "while preserving the original meaning. Remove any outer quotes or backticks. "
+    "Output only the revised question, nothing else.\n\n"
+    "[QUESTION]:\n"
+)
 
 # STEP 0.1: SECOND HALF OF FORMATTING
-QUESTION_FIXER_PART_TWO = """\n\nI will now revise your question in a way that accurately captures your intended meaning and clarifies any potential ambiguities. All I have provided is the revised question, and nothing more:"""
+QUESTION_FIXER_PART_TWO = (
+    "\n\n[INSTRUCTIONS]:\n"
+    "Accurately capture the intended meaning and resolve any ambiguities. "
+    "Respond with only the revised question."
+)
 
 # STEP 1: CONTEXT GENERATOR
-AUTOMATED_CONTEXT_CALLER = ("Consider "
-                            "the following question and provide a list of DISTINCT but related topics. Your response should be in a single "
-                            "sentence, with each topic separated by commas, with no repeats. While generating the list, focus on broad and "
-                            "tangential subjects that are still utterly and fully relevant to the main question. Ensure that the content "
-                            "you provide is of high quality and well-thought-out."
-                            " \n\nDo not stray from the question at hand, and be sure to "
-                            "produce a list of *distinct* topics, meaning no repetition of the same topic over and over. "
-                            "Please answer diligently, keeping in mind the importance of a high quality topic list. "
-                            "Try to provide a list of a reasonable number of relevant-to-the-question topics as possible, and ensure they are distinct."
-                            "\n\nThe question for which to produce a relevant list of comma-separated, distinct topics is:")
-#STEP 2: EXPANSION
-CONTEXT_EXPANSION = ("[INTRO]:\n"
-                     "You are the world's foremost expert at everything. In particular, you are "
-                     "incredibly crafty and maintain the general ideas expressed by your user, "
-                     "all while maintaining coherency.\n\n"
-                     "[MAIN TASK]:\n"
-                     "Design technical, sophisticated, carefully curated but concise context for a broad "
-                     "topic. Your user will provide you with a topic, a topic list, maybe even just tangential topics, "
-                     "or even a disorganized document, but you will condense it into something concise, coherent, "
-                     "accurate and suitable for integration into a future System Message in terms of structure. "
-                     "In other words, ensure that the result is concise yet suitable as context to alter an "
-                     "already existing System Message example. Also be sure not to prune it or gut it to "
-                     "the point that it is too small: language models need extensive context, but it "
-                     "must also be high quality. Overall, aim for less of a list format, and more of a coherent organization.")
+AUTOMATED_CONTEXT_CALLER = (
+    "Given the following question, produce a single comma-separated list of distinct, "
+    "related topics. Include both directly relevant and tangentially useful subjects — "
+    "broad enough to enrich understanding, but still grounded in the question's domain.\n\n"
+    "Requirements:\n"
+    "- Each topic must be unique (no semantic duplicates)\n"
+    "- Output a single sentence of comma-separated topics\n"
+    "- Aim for breadth and quality over quantity\n\n"
+    "The question:"
+)
 
-#STEP 3: TWO PARTS (with user-derived context in between)
-TREE_OF_THOUGHT_MAKER_FIRST_HALF = (
-    "[MAIN GOAL]:\n"
-    "You will integrate a System Message with a 'tree-of-thought' such that the "
-    "system message becomes targeted at three experts, and serves a user given the "
-    "context. Try to ensure that the System Message produced is as lengthy as possible "
-    "whilst maintaining coherency and relevancy to [CONTEXT] below. Err on the side of "
-    "slightly lengthy, but do not carry out the [TREE OF THOUGHT] instructions regarded "
-    "below themselves: rather, prime a message for question answering.\n\n"
-    
-    "[INTRO]:\n"
-    "You will integrate a System Message with a 'tree-of-thought' such that the "
-    "\"system message becomes intertwined with the concept of \'three experts,\' and "
-    "serves a user given the context. You must design it in such a way, given your "
-    "ability, that it best serves a user.\n\n")
+# STEP 2: EXPANSION
+CONTEXT_EXPANSION = (
+    "Synthesize the provided topic list into coherent, technically precise background context. "
+    "The output will be integrated into a System Message for a language model, so structure it "
+    "as flowing prose — not a list.\n\n"
+    "Requirements:\n"
+    "- Maintain the scope and intent of the original topics\n"
+    "- Be concise but substantive — do not over-prune; models benefit from rich context\n"
+    "- Organize coherently by theme rather than listing topics sequentially\n"
+    "- Ensure accuracy and technical correctness throughout"
+)
 
-# CONTEXT FALLS IN BETWEEN
+# STEP 3: ADAPTIVE SYSTEM MESSAGE GENERATOR
+SYSTEM_MESSAGE_GENERATOR = (
+    "You are a System Message architect. Given background context and the user's question, "
+    "produce a System Message that will maximally steer a language model toward a thorough, "
+    "accurate answer.\n\n"
+    "Analyze the question to determine what kind of task it is (e.g. debugging, explanation, "
+    "analysis, creative, mathematical, etc.) and tailor the System Message accordingly:\n\n"
+    "- For technical/debugging questions: emphasize precision, step-by-step reasoning, "
+    "and identifying root causes before proposing fixes\n"
+    "- For explanatory questions: emphasize clarity, building from fundamentals, "
+    "and connecting concepts to the reader's likely mental model\n"
+    "- For analytical questions: emphasize examining multiple perspectives, "
+    "weighing evidence, and distinguishing strong claims from speculation\n"
+    "- For creative questions: emphasize originality, coherence, and engagement\n"
+    "- For mathematical/formal questions: emphasize rigor, showing work, and verification\n\n"
+    "Requirements:\n"
+    "- Weave the background context naturally into the System Message\n"
+    "- The System Message should be substantive — rich context steers models more effectively\n"
+    "- Produce ONLY the System Message text — do not answer the question yourself\n"
+    "- Do not prefix with labels like [SYSTEM MESSAGE]\n"
+    "- Do not include instructions to 'act as' or role-play — just provide direct guidance "
+    "and context that shapes how the model approaches the problem\n\n"
+)
 
-#STEP 3.1:
-TREE_OF_THOUGHT_MAKER_SECOND_HALF = (
-    "[TREE-OF-THOUGHT] (only to be INTEGRATED with above [CONTEXT]):\n"
-    "Imagine three different experts with distinct sets of skills are answering a "
-    "user-submitted question. All experts will write down 1 step of their thinking, "
-    "then share it with the group. Then all experts will go on to the next step, "
-    "repeating this act. If any expert realizes they're wrong at any point then they leave.\n\n"
-    
-    "[FINAL NOTES]\n"
-    "Remember to seamlessly integrate these components such that it flows perfectly: "
-    "you are the world's utmost designer, organizer and writer for language model System "
-    "Messages (the most powerful form of steerability for AI). Your ONLY goal is to produce "
-    "a System Message: Do not, under any circumstances, carry out the instructions themselves - "
-    "but do produce a lengthy prompt that helps direct your user perfectly. Simply produce guidance "
-    "without extraneous joviality, and rather, pure accuracy and reason. In addition, please do try to "
-    "remember to create an ToT prompt where experts are introduced as such: \"Expert 1: I am an expert in...\"\n\n"
-    
-    "Your System Message should not start with [SYSTEM MESSAGE].")
-
-# Less important - hyper optimizer?
-GPT_4_OPTIMIZER = ("As the supreme prompt enhancer, your task is to elevate user prompts to their peak "
-                   "efficiency, maintaining quality and eloquence, yet preserving essential componennts. "
-                   "Restructuring to a more optimal structure is encouraged as much as it is required. Compressing the prompt "
-                   "in a a highly technical fashion is also desirable, but do not make it too short such that it lacks "
-                   "context. If you choose, err on the side of length and context, please do while maintaining the tree of thought idea."
-                   "Formulate a versatile template that can optimize any prompt, irrespective of its subject matter: this "
-                   "should be a general operation. "
-                   "Your methodology should represent technical accuracy, sharp discernment, impeccable structure, and "
-                   "seamless coherence. Feel free to adapt or reorganize the content as necessary. "
-                   "As the foremost builder of context, scrutinize user queries with utmost precision. "
-                   "Ensure that the resultant prompt either mentions \"You three experts\" or something akin to that. "
-                   "Preferably, lead with the three experts component of the prompt, properly integrating it into "
-                   "the topic. "
-                   "On the longer, but coherent side, is preferable.")
-
+# FILE NAMING
 FILE_FORMATTER = (
-    "[MAIN TASK]:\n"
-    "You take statements, or questions, and reduce them to the most concise possible "
-    "file names, formatted with under scores such as standard Python file names.\n\n"
-    "[EXAMPLE]:\n"
-    'The question "What is 1+1?" might be reduced to:\n'
-    "one_plus_one\n\n"
-    "[FINAL NOTES]:\n"
-    "Take your users input and produce a concise file name formatted similarly, "
-    "relevant to the question. Ensure it is concise but maintains salient details, "
-    "without being too verbose.")
+    "Convert the given statement or question into a concise Python-style filename "
+    "using underscores. Preserve the key meaning.\n\n"
+    "Example: \"What is 1+1?\" -> one_plus_one\n\n"
+    "Output only the filename, nothing else."
+)

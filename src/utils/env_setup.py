@@ -2,19 +2,23 @@ import argparse
 import os
 from dotenv import load_dotenv
 
+
 class EnvironmentSetup:
     _instance = None
 
     @staticmethod
     def parse_arguments():
-        parser = argparse.ArgumentParser(description="An easier and far cheaper way to use the gpt-3.5-turbo API, with results nearly comparable to ChatGPT 4 - with more additions coming soon!")
-        parser.add_argument("--model", type=str, help="Your chosen OpenAI model")
-        parser.add_argument("--temperature", type=float, help="Higher value is more random/creative.")
-        parser.add_argument("--query_mode", type=bool, help="Enter True or False to continue asking questions in this context.")
-        parser.add_argument("--openai_api_key", type=str, help="Your OPENAI_API_KEY")
-        parser.add_argument("--super_charged", type=lambda x: (str(x).lower() == 'true'), help="If you have access to GPT-4, empowers results.")
-        parser.add_argument("--prompt_dir", type=str, help="The directory for which you'd like to save your prompts and answer histories.", default="resources/prompts")
-        parser.add_argument("--top_p", type=float, help="Top P (sets probability for selecting from samples on LLMs)", default=0.5)
+        parser = argparse.ArgumentParser(
+            description="Tree-of-thought prompting pipeline using mixture-of-experts to enhance LLM outputs."
+        )
+        parser.add_argument("--model", type=str, help="Default OpenAI model (query mode, file naming, etc.).")
+        parser.add_argument("--pipeline_model", type=str, help="Model used for the pipeline steps (expensive).")
+        parser.add_argument("--temperature", type=float, help="Sampling temperature (higher = more creative).")
+        parser.add_argument("--top_p", type=float, help="Nucleus sampling probability.")
+        parser.add_argument("--query_mode", action="store_true", help="Enable interactive follow-up questions.")
+        parser.add_argument("--openai_api_key", type=str, help="OpenAI API key.")
+        parser.add_argument("--prompt_dir", type=str, help="Directory to save prompt/answer histories.",
+                            default="resources/prompts")
         return parser.parse_args()
 
     def __new__(cls):
@@ -27,15 +31,14 @@ class EnvironmentSetup:
         if self._initialized:
             return
         load_dotenv()
-        self.args = self.parse_arguments()
-        self.openai_api_key = self.args.openai_api_key if self.args.openai_api_key is not None else os.getenv("OPENAI_API_KEY")
-        self.model = self.args.model or os.getenv("MODEL")
-        self.super_charged = self.args.super_charged if self.args.super_charged is not None else (os.getenv("SUPER_CHARGED") == 'True')
-        self.temperature = self.args.temperature or None
-        self.query_mode = self.args.query_mode or None
-        self.prompt_dir = self.args.prompt_dir or None
-        self.top_p = float(os.getenv("TOP_P")) or self.args.top_p or 0.1
-        if (type(self.top_p) != float):
-            raise Exception("Issue with interpreting top_p!")
+        args = self.parse_arguments()
+
+        self.openai_api_key = args.openai_api_key or os.getenv("OPENAI_API_KEY")
+        self.model = args.model or os.getenv("MODEL", "gpt-5.1-mini")
+        self.pipeline_model = args.pipeline_model or os.getenv("PIPELINE_MODEL", "gpt-5.1")
+        self.temperature = args.temperature if args.temperature is not None else float(os.getenv("TEMPERATURE", "0.33"))
+        self.top_p = args.top_p if args.top_p is not None else float(os.getenv("TOP_P", "0.5"))
+        self.query_mode = args.query_mode or (os.getenv("QUERY_MODE", "").lower() == "true")
+        self.prompt_dir = args.prompt_dir
 
         self._initialized = True

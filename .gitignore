@@ -9,3 +9,5 @@ file_structure.sh
 tree_structure.sh
 output.txt
 src/unit_testing/*
+.claude/
+my_venv/

@@ -1,128 +1,151 @@
-from typing import Optional, Tuple
-from src.utils.constants import FILE_FORMATTER, QUESTION_FIXER_PART_ONE, QUESTION_FIXER_PART_TWO,\
-    CONTEXT_EXPANSION, TREE_OF_THOUGHT_MAKER_SECOND_HALF, TREE_OF_THOUGHT_MAKER_FIRST_HALF,\
-        AUTOMATED_CONTEXT_CALLER
+from typing import List, Dict, Tuple
+from termcolor import colored
+
+from src.utils.constants import (
+    FILE_FORMATTER,
+    QUESTION_FIXER_PART_ONE, QUESTION_FIXER_PART_TWO,
+    CONTEXT_EXPANSION,
+    SYSTEM_MESSAGE_GENERATOR,
+    AUTOMATED_CONTEXT_CALLER,
+)
 from src.chat_completion_generator import ChatCompletionGenerator
 from src.utils.logging import Logger
-from termcolor import colored
-from src.utils.env_setup import EnvironmentSetup
 
-log_obj = Logger()
-logger = log_obj.get_logger()
-env_and_flags = EnvironmentSetup()
+logger = Logger().get_logger()
+
 
 class ContentGenerator:
-    def __init__(self, prompt_num: Optional[int] = None, model: Optional[str] = None, super_charged: Optional[str] = None, default_compilation: Optional[str] = "", temperature: Optional[float] = 0.33, top_p: Optional[float] = 0.1):
+    def __init__(self, api_key: str, model: str, pipeline_model: str = None,
+                 temperature: float = 0.33, top_p: float = 0.5):
         """
-        Constructor for the ContentGenerator class
-        
+        Orchestrates the context-enrichment prompting pipeline.
+
         Args:
-            prompt_num (int, optional): The number of the prompt to use. Defaults to None.
-            openai_api_key (str, optional): The API key for OpenAI. Defaults to None.
-            model (str, optional): The model for OpenAI. Defaults to None.
-            super_charged (str, optional): The super charged mode for GPT-4. Defaults to None.
-            default_completion (str, optional): Defaults to nothing, but if you want a chat history, input what you'd like for querying purposes.
+            api_key: OpenAI API key.
+            model: The default model (used for query mode, file naming, etc.).
+            pipeline_model: The model used for pipeline steps. Defaults to model.
+            temperature: Sampling temperature.
+            top_p: Nucleus sampling parameter.
         """
-        # Basics
-        self.context_total = ""
-        self.prompt_num = prompt_num
-        self.openai_api_key = env_and_flags.openai_api_key
-        self.model = env_and_flags.model
-        self.super_charged = env_and_flags.super_charged
-        self.temperature = temperature
-        self.top_p = top_p
-        
-        # Initialize a gpt-3.5-turbo chat completer
-        self.chat_completer_big = ChatCompletionGenerator(temperature=temperature, prompt_num=prompt_num, openai_api_key=self.openai_api_key, model="gpt-4-0314", super_charged=self.super_charged, top_p=self.top_p)
-        
-        # Initialize a gpt-4-0314 chat completer (more powerful)
-        self.chat_completer_small = ChatCompletionGenerator(prompt_num=prompt_num, openai_api_key=self.openai_api_key, model="gpt-3.5-turbo-16k", super_charged=self.super_charged, temperature=self.temperature, top_p=self.top_p)
+        self.model = model
+        self.pipeline_model = pipeline_model or model
+        self.chat_completer = ChatCompletionGenerator(
+            api_key=api_key,
+            model=model,
+            temperature=temperature,
+            top_p=top_p,
+        )
 
-    from typing import List, Dict
-
-    def generate_plain_completion(self, json_file_input: List[Dict[str, str]], query: str) -> str:
-        # Ensure json_file_input is not empty and is a list
-        if not json_file_input or not isinstance(json_file_input, list):
+    def generate_plain_completion(self, conversation: List[Dict[str, str]], query: str) -> str:
+        """Generate a follow-up completion using existing conversation context."""
+        if not conversation or not isinstance(conversation, list):
             print(colored("INVALID CONVERSATION HISTORY", 'red'))
             return None
 
-        # Get the last system and user messages from the conversation history
-        last_system_message = json_file_input[-2]['content'] if len(json_file_input) > 1 else ""
-        last_user_message = json_file_input[-1]['content'] if json_file_input else ""
+        # Find the system message from the conversation
+        system_message = ""
+        for msg in conversation:
+            if msg.get("role") == "system":
+                system_message = msg["content"]
+                break
 
-        # Combine the last system message, last user message, and new user query into one string
-        full_input_for_completion = f"{last_system_message}\n{last_user_message}\n{query}"
+        # Build messages: system + all prior user/assistant turns + new query
+        messages = [{"role": "system", "content": system_message}]
+        for msg in conversation:
+            if msg["role"] != "system":
+                messages.append(msg)
+        messages.append({"role": "user", "content": query})
 
-        # Generate a new completion using the chat_completer_big
-        new_completion = self.chat_completer_big.generate_completion(env_and_flags.model, [
-            {"role": "system", "content": last_system_message},
-            {"role": "user", "content": last_user_message + "\n" + query}
-        ])
+        return self.chat_completer.generate_completion(messages)
 
-        return new_completion
+    # ── Pipeline Steps ───────────────────────────────────────────────
 
-    def perfect_question(self, user_input_question: str):
-        total_fixer_prompt = QUESTION_FIXER_PART_ONE + user_input_question + QUESTION_FIXER_PART_TWO
-        print(colored(total_fixer_prompt, 'yellow'))
-        fixed_user_input_question = self.chat_completer_big.generate_completion(env_and_flags.model, [{"role": "system", "content": total_fixer_prompt}])
-        return fixed_user_input_question
+    def perfect_question(self, user_input_question: str) -> str:
+        """Step 0: Fix grammar, clarity, and ambiguity in the user's question."""
+        prompt = QUESTION_FIXER_PART_ONE + user_input_question + QUESTION_FIXER_PART_TWO
+        print(colored(prompt, 'yellow'))
+        return self.chat_completer.generate_completion(
+            [{"role": "system", "content": prompt}],
+            model=self.pipeline_model,
+        )
 
-    def make_initial_context(self, user_input_question: str):
-        if user_input_question == "":
+    def make_initial_context(self, user_input_question: str) -> str:
+        """Step 1: Generate a list of distinct, related topics."""
+        if not user_input_question:
             print(colored("NO QUESTION PROVIDED", 'red'))
             exit(1)
-        full_input_for_context = AUTOMATED_CONTEXT_CALLER + "\n\n" + user_input_question
-        print(colored(full_input_for_context, 'yellow'))
-        initial_context = self.chat_completer_big.generate_completion(env_and_flags.model, [{"role": "system", "content": AUTOMATED_CONTEXT_CALLER}, {"role": "user", "content": user_input_question}])
-        return initial_context
+        full_input = AUTOMATED_CONTEXT_CALLER + "\n\n" + user_input_question
+        print(colored(full_input, 'yellow'))
+        return self.chat_completer.generate_completion([
+            {"role": "system", "content": AUTOMATED_CONTEXT_CALLER},
+            {"role": "user", "content": user_input_question},
+        ], model=self.pipeline_model)
 
-    def expand_context(self, initial_context: str):
-        expanded_context = self.chat_completer_big.generate_completion(env_and_flags.model, [{"role": "system", "content": CONTEXT_EXPANSION}, {"role": "user", "content": initial_context}])
-        return expanded_context
+    def expand_context(self, initial_context: str) -> str:
+        """Step 2: Synthesize topic list into rich background context."""
+        return self.chat_completer.generate_completion([
+            {"role": "system", "content": CONTEXT_EXPANSION},
+            {"role": "user", "content": initial_context},
+        ], model=self.pipeline_model)
 
-    def make_tree_of_thought_final(self, expanded_context: str):
-        total_system_message_input = TREE_OF_THOUGHT_MAKER_FIRST_HALF + "[CONTEXT]:\n" + expanded_context + "\n\n" + TREE_OF_THOUGHT_MAKER_SECOND_HALF
-        tree_of_thought_final = self.chat_completer_big.generate_completion(env_and_flags.model, [{"role": "system", "content": total_system_message_input}])
-        print(colored("Final Tree of Thought Prompt:\n", 'magenta'))
-        print(colored(tree_of_thought_final + "\n", 'green'))
-        logger.info(f"Tree Of Thought Generated:\n")
-        logger.info(f"{tree_of_thought_final}")
-        return tree_of_thought_final
+    def generate_system_message(self, expanded_context: str, question: str) -> str:
+        """Step 3: Build a task-adaptive system message from context and question."""
+        user_input = (
+            "[BACKGROUND CONTEXT]:\n" + expanded_context + "\n\n"
+            "[QUESTION TO BE ANSWERED]:\n" + question
+        )
+        result = self.chat_completer.generate_completion(
+            [
+                {"role": "system", "content": SYSTEM_MESSAGE_GENERATOR},
+                {"role": "user", "content": user_input},
+            ],
+            model=self.pipeline_model,
+        )
+        print(colored("Generated System Message:\n", 'magenta'))
+        print(colored(result + "\n", 'green'))
+        logger.info("System Message Generated:")
+        logger.info(result)
+        return result
 
-    def get_final_answer(self, tree_of_thought_final: str, user_question: str):
-        updated_user_question = "Experts, please come to a consensus on the following question:\n\n" + user_question
+    def get_final_answer(self, system_message: str, user_question: str) -> str:
+        """Step 4: Generate the final answer using the enriched system message."""
         print(colored("Final question to be asked:\n", 'red'))
-        print(colored(updated_user_question, 'magenta'))
-        final_answer = self.chat_completer_big.generate_completion(env_and_flags.model, [{"role": "system", "content": tree_of_thought_final}, {"role": "user", "content": updated_user_question}])
+        print(colored(user_question, 'magenta'))
+        answer = self.chat_completer.generate_completion([
+            {"role": "system", "content": system_message},
+            {"role": "user", "content": user_question},
+        ], model=self.pipeline_model)
         print(colored("Generated answer:\n", 'magenta'))
-        print(colored(final_answer, 'magenta'))
-        logger.info(f"Tree Of Thought Generated:\n")
-        logger.info(f"{final_answer}")
-        return final_answer
+        print(colored(answer, 'magenta'))
+        logger.info("Final answer generated:")
+        logger.info(answer)
+        return answer
 
-    def compile(self, user_input_question) -> Tuple:
-        # Fix question
+    # ── Main entry point ─────────────────────────────────────────────
+
+    def compile(self, user_input_question: str) -> Tuple[str, str]:
+        """Run the full context-enrichment pipeline on a user question."""
         perfected_question = self.perfect_question(user_input_question)
         print(colored("Your formatted question is below:\n", 'blue'))
         print(colored(perfected_question + "\n", 'green'))
-        
-        # Make initial list of related topics
-        inital_context = self.make_initial_context(perfected_question)
+
+        initial_context = self.make_initial_context(perfected_question)
         print(colored("Initial context:\n", 'red'))
-        print(colored(inital_context, 'magenta'))
-        
-        # Expand on that substantially
-        expanded_context = self.expand_context(inital_context)
+        print(colored(initial_context, 'magenta'))
+
+        expanded_context = self.expand_context(initial_context)
         print(colored("Expanded context:", 'red'))
         print(colored(expanded_context, 'magenta'))
 
-        # Use Tree of Thought to increase the robustness of a response
-        tree_of_thought_final = self.make_tree_of_thought_final(expanded_context)
-        
-        # Retrieve a final answer
-        final_answer = self.get_final_answer(tree_of_thought_final, perfected_question)
-        return [tree_of_thought_final, final_answer]
-    
+        system_message = self.generate_system_message(expanded_context, perfected_question)
+
+        final_answer = self.get_final_answer(system_message, perfected_question)
+        return (system_message, final_answer)
+
     def format_file_name(self, user_input_question: str) -> str:
-        formatted_file_name = self.chat_completer_big.generate_completion(env_and_flags.model, messages=[{"role": "system", "content": FILE_FORMATTER}, {"role": "user", "content": user_input_question}])
-        return formatted_file_name
+        return self.chat_completer.generate_completion(
+            messages=[
+                {"role": "system", "content": FILE_FORMATTER},
+                {"role": "user", "content": user_input_question},
+            ]
+        )
